@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  Widget _dialogBuilder(BuildContext context, Theater theater) {
+  Widget _dialogBuilder(BuildContext context) {
     return SimpleDialog(children: <Widget>[
       Container(
         width: 80,
@@ -62,15 +62,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildRow(Theater theater) {
     return GestureDetector(
-        onTap: () => showDialog(
-            context: context,
-            builder: (context) => _dialogBuilder(context, theater)),
+        // onTap: () => showDialog(
+        //     context: context,
+        //     builder: (context) => _dialogBuilder(context, theater)),
         child: ListTile(
-          title: Text(
-            theater.name,
-            style: _biggerFont,
-          ),
-        ));
+      title: Text(
+        theater.name,
+        style: _biggerFont,
+      ),
+    ));
   }
 
   void _listItemAdder() {
@@ -88,7 +88,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: _buildTheaters(),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: _listItemAdder,
+        onPressed: () => showDialog(
+            context: context, builder: (context) => _dialogBuilder(context)),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
