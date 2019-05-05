@@ -38,6 +38,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
+  final myController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is disposed
+    myController.dispose();
+    super.dispose();
+  }
+
   // #docregion _buildSuggestions
   Widget _buildTheaters() {
     return ListView.builder(
@@ -53,10 +62,40 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _dialogBuilder(BuildContext context) {
     return SimpleDialog(children: <Widget>[
-      Container(
-        width: 80,
-        height: 80,
-      )
+      Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(children: [
+            TextField(
+              controller: myController,
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Введите название сеанса'),
+            ),
+            Align(
+                alignment: Alignment.centerRight,
+                child: Wrap(
+                  children: <Widget>[
+                    FlatButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Cancel')),
+                    RaisedButton(
+                        onPressed: () {
+                          if (myController.text.isNotEmpty) {
+                            setState(() {
+                              _theaters.add(Theater(
+                                  name: myController.text,
+                                  time: TimeOfDay(hour: 10, minute: 20)));
+                            });
+
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        child: const Text('Ok')),
+                  ],
+                ))
+          ]))
     ]);
   }
 
