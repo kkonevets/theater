@@ -36,6 +36,7 @@ class ClientBuilder extends StatefulWidget {
 }
 
 class _ClientBuilderState extends State<ClientBuilder> {
+  bool firstBuild = true;
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final barcodeController = TextEditingController();
@@ -54,14 +55,16 @@ class _ClientBuilderState extends State<ClientBuilder> {
   @override
   Widget build(BuildContext context) {
     var superClient = super.widget.client;
-    if (super.widget.client != null) {
+    if (firstBuild && super.widget.client != null) {
       nameController.text = superClient.name;
       phoneController.text = superClient.phoneNumber;
       barcodeController.text = superClient.barcode;
       if (superClient.seatNumber != null) {
         seatNumberController.text = superClient.seatNumber.toString();
       }
+      firstBuild = false;
     }
+
     return SimpleDialog(children: <Widget>[
       Padding(
           padding: const EdgeInsets.all(16.0),
@@ -69,23 +72,19 @@ class _ClientBuilderState extends State<ClientBuilder> {
             TextField(
               autofocus: true,
               controller: nameController,
-              decoration:
-                  InputDecoration(border: InputBorder.none, labelText: "имя"),
+              decoration: InputDecoration(labelText: "имя"),
             ),
             TextField(
               controller: phoneController,
-              decoration: InputDecoration(
-                  border: InputBorder.none, labelText: 'телефон'),
+              decoration: InputDecoration(labelText: 'телефон'),
             ),
             TextField(
               controller: barcodeController,
-              decoration: InputDecoration(
-                  border: InputBorder.none, labelText: 'штрихкод'),
+              decoration: InputDecoration(labelText: 'штрих-код'),
             ),
             TextField(
               controller: seatNumberController,
-              decoration: InputDecoration(
-                  border: InputBorder.none, labelText: 'номер места'),
+              decoration: InputDecoration(labelText: 'номер места'),
             ),
             Align(
                 alignment: Alignment.centerRight,
