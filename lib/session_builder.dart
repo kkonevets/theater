@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'session.dart';
 
-class DialogBuilder extends StatefulWidget {
+class SessionBuilder extends StatefulWidget {
   @override
-  _DialogBuilderState createState() => _DialogBuilderState();
+  _SessionBuilderState createState() => _SessionBuilderState();
 }
 
-class _DialogBuilderState extends State<DialogBuilder> {
+class _SessionBuilderState extends State<SessionBuilder> {
   final myController = TextEditingController();
 
   @override
@@ -23,6 +23,7 @@ class _DialogBuilderState extends State<DialogBuilder> {
           padding: const EdgeInsets.all(16.0),
           child: Column(children: [
             TextField(
+              autofocus: true,
               controller: myController,
               decoration: InputDecoration(
                   border: InputBorder.none,
@@ -36,7 +37,7 @@ class _DialogBuilderState extends State<DialogBuilder> {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text('Cancel')),
+                        child: const Text('Отмена')),
                     RaisedButton(
                         onPressed: () {
                           if (myController.text.isNotEmpty) {

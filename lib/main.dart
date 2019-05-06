@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
   _displaySessionBuilder(BuildContext context) async {
     final Session session = await showDialog(
       context: context,
-      builder: (context) => DialogBuilder(),
+      builder: (context) => SessionBuilder(),
     );
 
     setState(() {

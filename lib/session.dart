@@ -9,34 +9,43 @@ class Session {
   int totalSeats;
 }
 
-class SessionRoute extends StatelessWidget {
-  final Session session;
-  List<Client> _clients = [
-    Client(
-        name: "Вася",
-        barcode: "234543432565",
-        phoneNumber: "+79261457894",
-        time: DateTime.parse("2019-07-20 20:18:04Z")),
-    Client(
-        name: "Петя",
-        barcode: "23436345254",
-        phoneNumber: "+79241557694",
-        time: DateTime.parse("2019-07-20 20:19:04Z")),
-    Client(
-        name: "Маша",
-        barcode: "96968565849",
-        phoneNumber: "+79061447824",
-        time: DateTime.parse("2019-07-20 20:12:04Z")),
-    Client(
-        name: "Света",
-        barcode: "25958438573475",
-        phoneNumber: "+7999345333",
-        time: DateTime.parse("2019-07-20 20:20:04Z"))
-  ];
+List<Client> _clients = [
+  Client(
+      name: "Вася",
+      barcode: "234543432565",
+      phoneNumber: "+79261457894",
+      time: DateTime.parse("2019-07-20 20:18:04Z"),
+      seatNumber: 44),
+  Client(
+      name: "Петя",
+      barcode: "23436345254",
+      phoneNumber: "+79241557694",
+      time: DateTime.parse("2019-07-20 20:19:04Z"),
+      seatNumber: 14),
+  Client(
+      name: "Маша",
+      barcode: "96968565849",
+      phoneNumber: "+79061447824",
+      time: DateTime.parse("2019-07-20 20:12:04Z"),
+      seatNumber: 3),
+  Client(
+      name: "Света",
+      barcode: "25958438573475",
+      phoneNumber: "+7999345333",
+      time: DateTime.parse("2019-07-20 20:20:04Z"),
+      seatNumber: 2)
+];
 
-  // In the constructor, require a Todo
+class SessionRoute extends StatefulWidget {
+  final Session session;
+
   SessionRoute({Key key, @required this.session}) : super(key: key);
 
+  @override
+  _SessionRouteState createState() => _SessionRouteState();
+}
+
+class _SessionRouteState extends State<SessionRoute> {
   Widget _buildClients() {
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
@@ -47,34 +56,44 @@ class SessionRoute extends StatelessWidget {
   }
 
   Widget _buildRow(Client client) {
+    String rowText = "${client.name}";
+    if (client.phoneNumber != null && client.phoneNumber.isNotEmpty) {
+      rowText += ", тел: ${client.phoneNumber}";
+    }
+    if (client.seatNumber != null) {
+      rowText += ", место ${client.seatNumber}";
+    }
+
     return GestureDetector(
-      // onTap: () => _pushClient(client),
+      onTap: () => _displayClientBuilder(context, client: client),
       child: ListTile(
         title: Text(
-          client.name,
+          rowText,
         ),
       ),
     );
   }
 
-  // void _pushClient(Client client) {
-  //   Navigator.of(context).push(
-  //     MaterialPageRoute<void>(
-  //         builder: (BuildContext context) =>
-  //             () {} //ClientRoute(client: client),
-  //         ),
-  //   );
-  // }
+  _displayClientBuilder(BuildContext context, {Client client}) async {
+    final Client modifiedClient = await showDialog(
+      context: context,
+      builder: (context) => ClientBuilder(
+            client: client,
+          ),
+    );
 
-  Widget _displayClientBuilder(BuildContext context) {
-    // return ;
+    if (modifiedClient != null) {
+      setState(() {
+        _clients.add(modifiedClient);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(session.name),
+        title: Text(super.widget.session.name),
       ),
       body: _buildClients(),
 
