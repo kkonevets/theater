@@ -29,15 +29,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
-  final myController = TextEditingController();
-
-  @override
-  void dispose() {
-    // Clean up the controller when the Widget is disposed
-    myController.dispose();
-    super.dispose();
-  }
-
   // #docregion _buildSuggestions
   Widget _buildSessions() {
     return ListView.builder(
