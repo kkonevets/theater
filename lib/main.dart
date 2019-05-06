@@ -1,65 +1,32 @@
 import 'package:flutter/material.dart';
+import 'session.dart';
+import 'session_builder.dart';
+
+List<Session> _sessions = [
+  Session(name: "Сеанс 1", time: TimeOfDay(hour: 10, minute: 20)),
+  Session(name: "Сеанс 2", time: TimeOfDay(hour: 13, minute: 0)),
+  Session(name: "Сеанс 3", time: TimeOfDay(hour: 15, minute: 45)),
+];
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final title = 'Session register';
-
-    return MaterialApp(
-        title: title, home: MyHomePage(title: "Session register"));
+    return MaterialApp(home: HomePage(title: "Сеансы"));
   }
 }
 
-class SessionRoute extends StatelessWidget {
-  final Session session;
-
-  // In the constructor, require a Todo
-  SessionRoute({Key key, @required this.session}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(session.name),
-      ),
-      body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            // Navigate back to first route when tapped.
-          },
-          child: Text('Go back!'),
-        ),
-      ),
-    );
-  }
-}
-
-class Session {
-  Session({this.name, this.time, this.totalSeats});
-
-  String name;
-  TimeOfDay time;
-  int totalSeats;
-}
-
-List<Session> _Sessions = [
-  Session(name: "Сеанс 1", time: TimeOfDay(hour: 10, minute: 20)),
-  Session(name: "Сеанс 2", time: TimeOfDay(hour: 13, minute: 0)),
-  Session(name: "Сеанс 3", time: TimeOfDay(hour: 15, minute: 45)),
-];
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class HomePage extends StatefulWidget {
+  HomePage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   final myController = TextEditingController();
@@ -75,52 +42,24 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildSessions() {
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
-        itemCount: _Sessions.length * 2 - 1, // including dividers
+        itemCount: _sessions.length * 2 - 1, // including dividers
         itemBuilder: (context, i) {
           if (i.isOdd) return Divider();
 
           final index = i ~/ 2;
-          return _buildRow(_Sessions[index]);
+          return _buildRow(_sessions[index]);
         });
   }
 
-  Widget _dialogBuilder(BuildContext context) {
-    return SimpleDialog(children: <Widget>[
-      Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(children: [
-            TextField(
-              controller: myController,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Введите название сеанса'),
-            ),
-            Align(
-                alignment: Alignment.centerRight,
-                child: Wrap(
-                  children: <Widget>[
-                    FlatButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Cancel')),
-                    RaisedButton(
-                        onPressed: () {
-                          if (myController.text.isNotEmpty) {
-                            setState(() {
-                              _Sessions.add(Session(
-                                  name: myController.text,
-                                  time: TimeOfDay(hour: 10, minute: 20)));
-                            });
+  _displaySessionBuilder(BuildContext context) async {
+    final Session session = await showDialog(
+      context: context,
+      builder: (context) => DialogBuilder(),
+    );
 
-                            Navigator.of(context).pop();
-                          }
-                        },
-                        child: const Text('Ok')),
-                  ],
-                ))
-          ]))
-    ]);
+    setState(() {
+      _sessions.add(session);
+    });
   }
 
   Widget _buildRow(Session session) {
@@ -151,8 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: _buildSessions(),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () => showDialog(
-            context: context, builder: (context) => _dialogBuilder(context)),
+        onPressed: () => _displaySessionBuilder(context),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
