@@ -7,13 +7,23 @@ class Client {
     this.phoneNumber,
     this.time,
     this.seatNumber,
+    this.id,
   });
+
+  fill(Client client) {
+    this.name = client.name;
+    this.barcode = client.barcode;
+    this.phoneNumber = client.phoneNumber;
+    this.seatNumber = client.seatNumber;
+    this.name = client.name;
+  }
 
   String name;
   String barcode;
   String phoneNumber;
   DateTime time;
   int seatNumber;
+  int id;
 }
 
 class ClientBuilder extends StatefulWidget {
@@ -43,11 +53,15 @@ class _ClientBuilderState extends State<ClientBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    nameController.text = super.widget.client.name;
-    phoneController.text = super.widget.client.phoneNumber;
-    barcodeController.text = super.widget.client.barcode;
-    seatNumberController.text ??= super.widget.client.seatNumber.toString();
-
+    var superClient = super.widget.client;
+    if (super.widget.client != null) {
+      nameController.text = superClient.name;
+      phoneController.text = superClient.phoneNumber;
+      barcodeController.text = superClient.barcode;
+      if (superClient.seatNumber != null) {
+        seatNumberController.text = superClient.seatNumber.toString();
+      }
+    }
     return SimpleDialog(children: <Widget>[
       Padding(
           padding: const EdgeInsets.all(16.0),
@@ -56,22 +70,22 @@ class _ClientBuilderState extends State<ClientBuilder> {
               autofocus: true,
               controller: nameController,
               decoration:
-                  InputDecoration(border: InputBorder.none, hintText: 'имя'),
+                  InputDecoration(border: InputBorder.none, labelText: "имя"),
             ),
             TextField(
               controller: phoneController,
               decoration: InputDecoration(
-                  border: InputBorder.none, hintText: 'телефон'),
+                  border: InputBorder.none, labelText: 'телефон'),
             ),
             TextField(
               controller: barcodeController,
               decoration: InputDecoration(
-                  border: InputBorder.none, hintText: 'штрихкод'),
+                  border: InputBorder.none, labelText: 'штрихкод'),
             ),
             TextField(
               controller: seatNumberController,
               decoration: InputDecoration(
-                  border: InputBorder.none, hintText: 'номер места'),
+                  border: InputBorder.none, labelText: 'номер места'),
             ),
             Align(
                 alignment: Alignment.centerRight,

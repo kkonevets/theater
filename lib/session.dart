@@ -48,10 +48,9 @@ class SessionRoute extends StatefulWidget {
 class _SessionRouteState extends State<SessionRoute> {
   Widget _buildClients() {
     return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
         itemCount: _clients.length,
-        itemBuilder: (context, i) {
-          return _buildRow(_clients[i]);
+        itemBuilder: (context, index) {
+          return _buildRow(_clients[index]);
         });
   }
 
@@ -83,9 +82,15 @@ class _SessionRouteState extends State<SessionRoute> {
     );
 
     if (modifiedClient != null) {
-      setState(() {
-        _clients.add(modifiedClient);
-      });
+      if (client == null) {
+        setState(() {
+          _clients.add(modifiedClient);
+        });
+      } else {
+        final found =
+            _clients.firstWhere((item) => item.hashCode == client.hashCode);
+        setState(() => found.fill(modifiedClient));
+      }
     }
   }
 
