@@ -5,25 +5,49 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final title = 'Theater register';
+    final title = 'Session register';
 
     return MaterialApp(
-        title: title, home: MyHomePage(title: "Theater register"));
+        title: title, home: MyHomePage(title: "Session register"));
   }
 }
 
-class Theater {
-  Theater({this.name, this.time, this.totalSeats});
+class SessionRoute extends StatelessWidget {
+  final Session session;
+
+  // In the constructor, require a Todo
+  SessionRoute({Key key, @required this.session}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(session.name),
+      ),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () {
+            // Navigate back to first route when tapped.
+          },
+          child: Text('Go back!'),
+        ),
+      ),
+    );
+  }
+}
+
+class Session {
+  Session({this.name, this.time, this.totalSeats});
 
   String name;
   TimeOfDay time;
   int totalSeats;
 }
 
-List<Theater> _theaters = [
-  Theater(name: "Сеанс 1", time: TimeOfDay(hour: 10, minute: 20)),
-  Theater(name: "Сеанс 2", time: TimeOfDay(hour: 13, minute: 0)),
-  Theater(name: "Сеанс 3", time: TimeOfDay(hour: 15, minute: 45)),
+List<Session> _Sessions = [
+  Session(name: "Сеанс 1", time: TimeOfDay(hour: 10, minute: 20)),
+  Session(name: "Сеанс 2", time: TimeOfDay(hour: 13, minute: 0)),
+  Session(name: "Сеанс 3", time: TimeOfDay(hour: 15, minute: 45)),
 ];
 
 class MyHomePage extends StatefulWidget {
@@ -48,15 +72,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // #docregion _buildSuggestions
-  Widget _buildTheaters() {
+  Widget _buildSessions() {
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
-        itemCount: _theaters.length * 2 - 1, // including dividers
+        itemCount: _Sessions.length * 2 - 1, // including dividers
         itemBuilder: (context, i) {
           if (i.isOdd) return Divider();
 
           final index = i ~/ 2;
-          return _buildRow(_theaters[index]);
+          return _buildRow(_Sessions[index]);
         });
   }
 
@@ -84,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onPressed: () {
                           if (myController.text.isNotEmpty) {
                             setState(() {
-                              _theaters.add(Theater(
+                              _Sessions.add(Session(
                                   name: myController.text,
                                   time: TimeOfDay(hour: 10, minute: 20)));
                             });
@@ -99,23 +123,23 @@ class _MyHomePageState extends State<MyHomePage> {
     ]);
   }
 
-  Widget _buildRow(Theater theater) {
+  Widget _buildRow(Session session) {
     return GestureDetector(
-        // onTap: () => showDialog(
-        //     context: context,
-        //     builder: (context) => _dialogBuilder(context, theater)),
+        onTap: () => _pushClients(session),
         child: ListTile(
-      title: Text(
-        theater.name,
-        style: _biggerFont,
-      ),
-    ));
+          title: Text(
+            session.name,
+            style: _biggerFont,
+          ),
+        ));
   }
 
-  void _listItemAdder() {
-    setState(() {
-      // _counter++;
-    });
+  void _pushClients(Session session) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => SessionRoute(session: session),
+      ),
+    );
   }
 
   @override
@@ -124,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: _buildTheaters(),
+      body: _buildSessions(),
 
       floatingActionButton: FloatingActionButton(
         onPressed: () => showDialog(
