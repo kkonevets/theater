@@ -29,7 +29,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
-  // #docregion _buildSuggestions
   Widget _buildSessions() {
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
@@ -55,16 +54,17 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildRow(Session session) {
     return GestureDetector(
-        onTap: () => _pushClients(session),
-        child: ListTile(
-          title: Text(
-            session.name,
-            style: _biggerFont,
-          ),
-        ));
+      onTap: () => _pushSession(session),
+      child: ListTile(
+        title: Text(
+          session.name,
+          style: _biggerFont,
+        ),
+      ),
+    );
   }
 
-  void _pushClients(Session session) {
+  void _pushSession(Session session) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (BuildContext context) => SessionRoute(session: session),

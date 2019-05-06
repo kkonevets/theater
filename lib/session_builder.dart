@@ -40,7 +40,7 @@ class _DialogBuilderState extends State<DialogBuilder> {
                     RaisedButton(
                         onPressed: () {
                           if (myController.text.isNotEmpty) {
-                            var session = Session(
+                            Session session = Session(
                                 name: myController.text,
                                 time: TimeOfDay(hour: 10, minute: 20));
                             Navigator.pop(context, session);
