@@ -47,9 +47,11 @@ class _HomePageState extends State<HomePage> {
       builder: (context) => SessionBuilder(),
     );
 
-    setState(() {
-      _sessions.add(session);
-    });
+    if (session != null) {
+      setState(() {
+        _sessions.add(session);
+      });
+    }
   }
 
   Widget _buildRow(Session session) {
