@@ -4,9 +4,18 @@ import 'session.dart';
 import 'session_builder.dart';
 
 List<Session> _sessions = [
-  Session(name: "Сеанс 1", time: DateTime.parse("2019-07-20 10:05:04Z")),
-  Session(name: "Сеанс 2", time: DateTime.parse("2019-07-20 14:20:04Z")),
-  Session(name: "Сеанс 3", time: DateTime.parse("2019-07-20 20:45:04Z")),
+  Session(
+      name: "Сеанс 1",
+      time: DateTime.parse("2019-07-20 10:05:04Z"),
+      totalSeats: 33),
+  Session(
+      name: "Сеанс 2",
+      time: DateTime.parse("2019-07-20 14:20:04Z"),
+      totalSeats: 40),
+  Session(
+      name: "Сеанс 3",
+      time: DateTime.parse("2019-07-20 20:45:04Z"),
+      totalSeats: 60),
 ];
 
 void main() => runApp(MyApp());

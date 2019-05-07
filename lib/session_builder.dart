@@ -28,7 +28,9 @@ class _SessionBuilderState extends State<SessionBuilder> {
     var superSession = super.widget.session;
     if (firstBuild && superSession != null) {
       nameController.text = superSession.name;
-      totalSeatsController.text = superSession.totalSeats.toString();
+      totalSeatsController.text = superSession.totalSeats == null
+          ? 0
+          : superSession.totalSeats.toString();
       firstBuild = false;
     }
 
