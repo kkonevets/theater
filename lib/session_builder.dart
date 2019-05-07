@@ -60,7 +60,9 @@ class _SessionBuilderState extends State<SessionBuilder> {
                           if (nameController.text.isNotEmpty) {
                             var session = Session(
                               name: nameController.text,
-                              totalSeats: int.parse(totalSeatsController.text),
+                              totalSeats: totalSeatsController.text == ""
+                                  ? 0
+                                  : int.parse(totalSeatsController.text),
                               time: superSession == null
                                   ? DateTime.now()
                                   : superSession.time,
