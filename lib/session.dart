@@ -66,9 +66,11 @@ class _SessionRouteState extends State<SessionRoute> {
     }
 
     void isPresentOnChanged(bool value) {
-      setState(() {
-        client.isPresent = value;
-      });
+      if (client != null) {
+        setState(() {
+          client.isPresent = value;
+        });
+      }
     }
 
     return GestureDetector(

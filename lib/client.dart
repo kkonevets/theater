@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Client {
   Client(
@@ -66,9 +67,27 @@ class _ClientBuilderState extends State<ClientBuilder> {
     }
 
     void isPresentOnChanged(bool value) {
-      setState(() {
-        superClient.isPresent = value;
-      });
+      if (superClient != null) {
+        setState(() {
+          superClient.isPresent = value;
+        });
+      }
+    }
+
+    bool getIsPresent(client) {
+      if (superClient == null) {
+        return true;
+      } else {
+        return superClient.isPresent == null ? false : superClient.isPresent;
+      }
+    }
+
+    Widget getDateTimeFormat(client) {
+      if (superClient == null) {
+        return Text("");
+      } else {
+        return Text(DateFormat.Hm().format(superClient.time));
+      }
     }
 
     return SimpleDialog(children: <Widget>[
@@ -93,9 +112,9 @@ class _ClientBuilderState extends State<ClientBuilder> {
               decoration: InputDecoration(labelText: 'номер места'),
             ),
             CheckboxListTile(
-              value:
-                  superClient.isPresent == null ? false : superClient.isPresent,
+              value: getIsPresent(superClient),
               title: Text('присутствует'),
+              subtitle: getDateTimeFormat(superClient),
               onChanged: isPresentOnChanged,
             ),
             Align(
@@ -114,7 +133,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
                                 name: nameController.text,
                                 phoneNumber: phoneController.text,
                                 barcode: barcodeController.text,
-                                isPresent: superClient.isPresent,
+                                isPresent: getIsPresent(superClient),
                                 seatNumber:
                                     int.tryParse(seatNumberController.text),
                                 time: DateTime.now());

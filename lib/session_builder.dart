@@ -13,11 +13,13 @@ class SessionBuilder extends StatefulWidget {
 class _SessionBuilderState extends State<SessionBuilder> {
   bool firstBuild = true;
   final nameController = TextEditingController();
+  final totalSeatsController = TextEditingController();
 
   @override
   void dispose() {
     // Clean up the controller when the Widget is disposed
     nameController.dispose();
+    totalSeatsController.dispose();
     super.dispose();
   }
 
@@ -26,6 +28,7 @@ class _SessionBuilderState extends State<SessionBuilder> {
     var superSession = super.widget.session;
     if (firstBuild && superSession != null) {
       nameController.text = superSession.name;
+      totalSeatsController.text = superSession.totalSeats.toString();
       firstBuild = false;
     }
 
@@ -40,8 +43,8 @@ class _SessionBuilderState extends State<SessionBuilder> {
             ),
             TextFormField(
               keyboardType: TextInputType.number,
+              controller: totalSeatsController,
               decoration: InputDecoration(labelText: 'количество мест'),
-              onSaved: (String value) {},
             ),
             Align(
                 alignment: Alignment.centerRight,
@@ -57,8 +60,10 @@ class _SessionBuilderState extends State<SessionBuilder> {
                           if (nameController.text.isNotEmpty) {
                             var session = Session(
                               name: nameController.text,
-                              totalSeats: superSession.totalSeats,
-                              time: superSession.time,
+                              totalSeats: int.parse(totalSeatsController.text),
+                              time: superSession == null
+                                  ? DateTime.now()
+                                  : superSession.time,
                             );
                             Navigator.pop(context, session);
                           }

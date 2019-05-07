@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'session.dart';
 import 'session_builder.dart';
 
@@ -81,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
                       child: Text(
-                        session.time.toString(),
+                        DateFormat.Hm().format(session.time),
                         style: TextStyle(fontSize: 15.0),
                       ),
                     ),
