@@ -3,9 +3,9 @@ import 'session.dart';
 import 'session_builder.dart';
 
 List<Session> _sessions = [
-  Session(name: "Сеанс 1", time: TimeOfDay(hour: 10, minute: 20)),
-  Session(name: "Сеанс 2", time: TimeOfDay(hour: 13, minute: 0)),
-  Session(name: "Сеанс 3", time: TimeOfDay(hour: 15, minute: 45)),
+  Session(name: "Сеанс 1", time: DateTime.parse("2019-07-20 10:05:04Z")),
+  Session(name: "Сеанс 2", time: DateTime.parse("2019-07-20 14:20:04Z")),
+  Session(name: "Сеанс 3", time: DateTime.parse("2019-07-20 20:45:04Z")),
 ];
 
 void main() => runApp(MyApp());
@@ -27,8 +27,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _biggerFont = const TextStyle(fontSize: 18.0);
-
   Widget _buildSessions() {
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
@@ -41,28 +39,71 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  _displaySessionBuilder(BuildContext context) async {
-    final Session session = await showDialog(
+  _displaySessionBuilder(BuildContext context, {Session session}) async {
+    final Session modifiedSession = await showDialog(
       context: context,
-      builder: (context) => SessionBuilder(),
+      builder: (context) => SessionBuilder(session: session),
     );
 
-    if (session != null) {
-      setState(() {
-        _sessions.add(session);
-      });
+    if (modifiedSession != null) {
+      if (session == null) {
+        setState(() {
+          _sessions.add(modifiedSession);
+        });
+      } else {
+        final found =
+            _sessions.firstWhere((item) => item.hashCode == session.hashCode);
+        setState(() => found.fill(modifiedSession));
+      }
     }
   }
 
   Widget _buildRow(Session session) {
-    return GestureDetector(
-      onTap: () => _pushSession(session),
-      child: ListTile(
-        title: Text(
-          session.name,
-          style: _biggerFont,
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            GestureDetector(
+                onTap: () => _pushSession(session),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
+                      child: Text(
+                        session.name,
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
+                      child: Text(
+                        session.time.toString(),
+                        style: TextStyle(fontSize: 15.0),
+                      ),
+                    ),
+                  ],
+                )),
+            GestureDetector(
+                onTap: () => _displaySessionBuilder(context, session: session),
+                child: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.edit),
+                      ),
+                    ],
+                  ),
+                )),
+          ],
         ),
-      ),
+      ],
     );
   }
 

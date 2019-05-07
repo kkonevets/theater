@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 
 class Client {
-  Client({
-    this.name,
-    this.barcode,
-    this.phoneNumber,
-    this.time,
-    this.seatNumber,
-    this.id,
-  });
+  Client(
+      {this.name,
+      this.barcode,
+      this.phoneNumber,
+      this.time,
+      this.seatNumber,
+      this.isPresent});
 
   fill(Client client) {
     this.name = client.name;
     this.barcode = client.barcode;
     this.phoneNumber = client.phoneNumber;
     this.seatNumber = client.seatNumber;
-    this.name = client.name;
+    this.isPresent = client.isPresent;
   }
 
   String name;
@@ -23,13 +22,13 @@ class Client {
   String phoneNumber;
   DateTime time;
   int seatNumber;
-  int id;
+  bool isPresent;
 }
 
 class ClientBuilder extends StatefulWidget {
   final Client client;
 
-  ClientBuilder({this.client});
+  ClientBuilder({Key key, this.client}) : super(key: key);
 
   @override
   _ClientBuilderState createState() => _ClientBuilderState();
@@ -41,6 +40,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
   final phoneController = TextEditingController();
   final barcodeController = TextEditingController();
   final seatNumberController = TextEditingController();
+  final bool isPresent = false;
 
   @override
   void dispose() {
@@ -55,7 +55,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
   @override
   Widget build(BuildContext context) {
     var superClient = super.widget.client;
-    if (firstBuild && super.widget.client != null) {
+    if (firstBuild && superClient != null) {
       nameController.text = superClient.name;
       phoneController.text = superClient.phoneNumber;
       barcodeController.text = superClient.barcode;
@@ -63,6 +63,12 @@ class _ClientBuilderState extends State<ClientBuilder> {
         seatNumberController.text = superClient.seatNumber.toString();
       }
       firstBuild = false;
+    }
+
+    void isPresentOnChanged(bool value) {
+      setState(() {
+        superClient.isPresent = value;
+      });
     }
 
     return SimpleDialog(children: <Widget>[
@@ -86,6 +92,12 @@ class _ClientBuilderState extends State<ClientBuilder> {
               controller: seatNumberController,
               decoration: InputDecoration(labelText: 'номер места'),
             ),
+            CheckboxListTile(
+              value:
+                  superClient.isPresent == null ? false : superClient.isPresent,
+              title: Text('присутствует'),
+              onChanged: isPresentOnChanged,
+            ),
             Align(
                 alignment: Alignment.centerRight,
                 child: Wrap(
@@ -102,6 +114,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
                                 name: nameController.text,
                                 phoneNumber: phoneController.text,
                                 barcode: barcodeController.text,
+                                isPresent: superClient.isPresent,
                                 seatNumber:
                                     int.tryParse(seatNumberController.text),
                                 time: DateTime.now());

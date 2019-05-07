@@ -3,9 +3,14 @@ import 'client.dart';
 
 class Session {
   Session({this.name, this.time, this.totalSeats});
+  fill(Session session) {
+    this.name = session.name;
+    this.time = session.time;
+    this.totalSeats = session.totalSeats;
+  }
 
   String name;
-  TimeOfDay time;
+  DateTime time;
   int totalSeats;
 }
 
@@ -55,20 +60,68 @@ class _SessionRouteState extends State<SessionRoute> {
   }
 
   Widget _buildRow(Client client) {
-    String rowText = "${client.name}";
-    if (client.phoneNumber != null && client.phoneNumber.isNotEmpty) {
-      rowText += ", тел: ${client.phoneNumber}";
-    }
+    String rowText = "";
     if (client.seatNumber != null) {
-      rowText += ", место ${client.seatNumber}";
+      rowText += "место ${client.seatNumber}";
+    }
+
+    void isPresentOnChanged(bool value) {
+      setState(() {
+        client.isPresent = value;
+      });
     }
 
     return GestureDetector(
       onTap: () => _displayClientBuilder(context, client: client),
-      child: ListTile(
-        title: Text(
-          rowText,
-        ),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
+                    child: Text(
+                      client.name,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
+                    child: Text(
+                      rowText,
+                      style: TextStyle(fontSize: 15.0),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Checkbox(
+                        value:
+                            client.isPresent == null ? false : client.isPresent,
+                        onChanged: isPresentOnChanged,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Divider(
+            height: 2.0,
+            color: Colors.grey,
+          )
+        ],
       ),
     );
   }
