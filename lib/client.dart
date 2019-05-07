@@ -37,11 +37,11 @@ class ClientBuilder extends StatefulWidget {
 
 class _ClientBuilderState extends State<ClientBuilder> {
   bool firstBuild = true;
+  bool isPresent = true;
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final barcodeController = TextEditingController();
   final seatNumberController = TextEditingController();
-  final bool isPresent = false;
 
   @override
   void dispose() {
@@ -56,30 +56,23 @@ class _ClientBuilderState extends State<ClientBuilder> {
   @override
   Widget build(BuildContext context) {
     var superClient = super.widget.client;
-    if (firstBuild && superClient != null) {
-      nameController.text = superClient.name;
-      phoneController.text = superClient.phoneNumber;
-      barcodeController.text = superClient.barcode;
-      if (superClient.seatNumber != null) {
-        seatNumberController.text = superClient.seatNumber.toString();
-      }
-      firstBuild = false;
-    }
 
-    void isPresentOnChanged(bool value) {
+    if (firstBuild) {
       if (superClient != null) {
-        setState(() {
-          superClient.isPresent = value;
-        });
-      }
-    }
+        nameController.text = superClient.name;
+        phoneController.text = superClient.phoneNumber;
+        barcodeController.text = superClient.barcode;
+        if (superClient.seatNumber != null) {
+          seatNumberController.text = superClient.seatNumber.toString();
+        }
 
-    bool getIsPresent(client) {
-      if (superClient == null) {
-        return true;
+        isPresent =
+            superClient.isPresent == null ? false : superClient.isPresent;
       } else {
-        return superClient.isPresent == null ? false : superClient.isPresent;
+        isPresent = true;
       }
+
+      firstBuild = false;
     }
 
     Widget getDateTimeFormat(client) {
@@ -112,10 +105,14 @@ class _ClientBuilderState extends State<ClientBuilder> {
               decoration: InputDecoration(labelText: 'номер места'),
             ),
             CheckboxListTile(
-              value: getIsPresent(superClient),
+              value: isPresent,
               title: Text('присутствует'),
               subtitle: getDateTimeFormat(superClient),
-              onChanged: isPresentOnChanged,
+              onChanged: (bool value) {
+                setState(() {
+                  isPresent = value;
+                });
+              },
             ),
             Align(
                 alignment: Alignment.centerRight,
@@ -133,7 +130,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
                                 name: nameController.text,
                                 phoneNumber: phoneController.text,
                                 barcode: barcodeController.text,
-                                isPresent: getIsPresent(superClient),
+                                isPresent: isPresent,
                                 seatNumber:
                                     int.tryParse(seatNumberController.text),
                                 time: DateTime.now());
