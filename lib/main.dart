@@ -98,18 +98,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   _displaySessionBuilder(BuildContext context, [Session session]) async {
-
-    if (session == null){
+    bool anew = false;
+    if (session == null) {
+      anew = true;
       session = Session(time: DateTime.now());
-      _sessions.add(session);
     }
 
-    await showDialog(
+    final Session modifiedSession = await showDialog(
       context: context,
       builder: (context) => SessionBuilder(session: session),
     );
 
-    setState(() {});
+    setState(() {
+      if (modifiedSession != null && anew) {
+        _sessions.add(session);
+      }
+    });
   }
 
   void _pushSession(Session session) {
@@ -128,8 +132,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _buildSessions(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            _displaySessionBuilder(context),
+        onPressed: () => _displaySessionBuilder(context),
         tooltip: 'Добавить сеанс',
         child: Icon(Icons.add),
       ),

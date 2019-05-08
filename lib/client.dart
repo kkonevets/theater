@@ -10,14 +10,6 @@ class Client {
       this.seatNumber,
       this.isPresent});
 
-  fill(Client client) {
-    this.name = client.name;
-    this.barcode = client.barcode;
-    this.phoneNumber = client.phoneNumber;
-    this.seatNumber = client.seatNumber;
-    this.isPresent = client.isPresent;
-  }
-
   String name;
   String barcode;
   String phoneNumber;
@@ -32,16 +24,28 @@ class ClientBuilder extends StatefulWidget {
   ClientBuilder({Key key, this.client}) : super(key: key);
 
   @override
-  _ClientBuilderState createState() => _ClientBuilderState();
+  _ClientBuilderState createState() => _ClientBuilderState(client);
 }
 
 class _ClientBuilderState extends State<ClientBuilder> {
-  bool firstBuild = true;
+  final Client client;
   bool isPresent = true;
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final barcodeController = TextEditingController();
   final seatNumberController = TextEditingController();
+
+  _ClientBuilderState(this.client) {
+    if (client != null) {
+      nameController.text = client.name;
+      phoneController.text = client.phoneNumber;
+      barcodeController.text = client.barcode;
+      seatNumberController.text =
+          client.seatNumber == null ? "" : client.seatNumber.toString();
+
+      isPresent = client.isPresent == null ? false : client.isPresent;
+    }
+  }
 
   @override
   void dispose() {
@@ -55,31 +59,11 @@ class _ClientBuilderState extends State<ClientBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    var superClient = super.widget.client;
-
-    if (firstBuild) {
-      if (superClient != null) {
-        nameController.text = superClient.name;
-        phoneController.text = superClient.phoneNumber;
-        barcodeController.text = superClient.barcode;
-        if (superClient.seatNumber != null) {
-          seatNumberController.text = superClient.seatNumber.toString();
-        }
-
-        isPresent =
-            superClient.isPresent == null ? false : superClient.isPresent;
-      } else {
-        isPresent = true;
-      }
-
-      firstBuild = false;
-    }
-
-    Widget getDateTimeFormat(client) {
-      if (superClient == null) {
+    Widget getDateTimeFormat() {
+      if (client == null) {
         return Text("");
       } else {
-        return Text(DateFormat.Hm().format(superClient.time));
+        return Text(DateFormat.Hm().format(client.time));
       }
     }
 
@@ -107,7 +91,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
             CheckboxListTile(
               value: isPresent,
               title: Text('присутствует'),
-              subtitle: getDateTimeFormat(superClient),
+              subtitle: getDateTimeFormat(),
               onChanged: (bool value) {
                 setState(() {
                   isPresent = value;
@@ -126,14 +110,13 @@ class _ClientBuilderState extends State<ClientBuilder> {
                     RaisedButton(
                         onPressed: () {
                           if (nameController.text.isNotEmpty) {
-                            var client = Client(
-                                name: nameController.text,
-                                phoneNumber: phoneController.text,
-                                barcode: barcodeController.text,
-                                isPresent: isPresent,
-                                seatNumber:
-                                    int.tryParse(seatNumberController.text),
-                                time: DateTime.now());
+                            client.name = nameController.text;
+                            client.phoneNumber = phoneController.text;
+                            client.barcode = barcodeController.text;
+                            client.isPresent = isPresent;
+                            client.seatNumber =
+                                int.tryParse(seatNumberController.text);
+
                             Navigator.pop(context, client);
                           }
                         },

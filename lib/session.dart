@@ -4,12 +4,6 @@ import 'client.dart';
 class Session {
   Session({this.name, this.time, this.totalSeats});
 
-  fill(Session session) {
-    this.name = session.name;
-    this.time = session.time;
-    this.totalSeats = session.totalSeats;
-  }
-
   String name;
   DateTime time;
   int totalSeats;
@@ -75,7 +69,7 @@ class _SessionRouteState extends State<SessionRoute> {
     }
 
     return GestureDetector(
-      onTap: () => _displayClientBuilder(context, client: client),
+      onTap: () => _displayClientBuilder(context, client),
       child: Column(
         children: <Widget>[
           Row(
@@ -129,23 +123,24 @@ class _SessionRouteState extends State<SessionRoute> {
     );
   }
 
-  _displayClientBuilder(BuildContext context, {Client client}) async {
+  _displayClientBuilder(BuildContext context, [Client client]) async {
+    bool anew = false;
+
+    if (client == null) {
+      anew = true;
+      client = Client(time: DateTime.now(), isPresent: true);
+    }
+
     final Client modifiedClient = await showDialog(
       context: context,
-      builder: (context) => ClientBuilder(
-            client: client,
-          ),
+      builder: (context) => ClientBuilder(client: client),
     );
 
-    if (modifiedClient != null) {
-      if (client == null) {
-        setState(() {
-          _clients.add(modifiedClient);
-        });
-      } else {
-        setState(() => client.fill(modifiedClient));
+    setState(() {
+      if (modifiedClient != null && anew) {
+        _clients.add(modifiedClient);
       }
-    }
+    });
   }
 
   @override
@@ -158,7 +153,7 @@ class _SessionRouteState extends State<SessionRoute> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () => _displayClientBuilder(context),
-        tooltip: 'Increment',
+        tooltip: 'Добавить зрителя',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );

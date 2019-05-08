@@ -60,9 +60,11 @@ class _SessionBuilderState extends State<SessionBuilder> {
                         onPressed: () {
                           if (nameController.text.isNotEmpty) {
                             session.name = nameController.text;
-                            session.totalSeats = totalSeatsController.text == ""
-                                ? 0
-                                : int.parse(totalSeatsController.text);
+                            if (totalSeatsController.text != "") {
+                              session.totalSeats =
+                                  int.parse(totalSeatsController.text);
+                            }
+
                             Navigator.pop(context, session);
                           }
                         },
