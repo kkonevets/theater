@@ -3,6 +3,7 @@ import 'client.dart';
 
 class Session {
   Session({this.name, this.time, this.totalSeats});
+
   fill(Session session) {
     this.name = session.name;
     this.time = session.time;
@@ -15,30 +16,30 @@ class Session {
 }
 
 List<Client> _clients = [
-   Client(
-       name: "Вася",
-       barcode: "234543432565",
-       phoneNumber: "+79261457894",
-       time: DateTime.parse("2019-07-20 20:18:04Z"),
-       seatNumber: 44),
-   Client(
-       name: "Петя",
-       barcode: "23436345254",
-       phoneNumber: "+79241557694",
-       time: DateTime.parse("2019-07-20 20:19:04Z"),
-       seatNumber: 14),
-   Client(
-       name: "Маша",
-       barcode: "96968565849",
-       phoneNumber: "+79061447824",
-       time: DateTime.parse("2019-07-20 20:12:04Z"),
-       seatNumber: 3),
-   Client(
-       name: "Света",
-       barcode: "25958438573475",
-       phoneNumber: "+7999345333",
-       time: DateTime.parse("2019-07-20 20:20:04Z"),
-       seatNumber: 2)
+  Client(
+      name: "Вася",
+      barcode: "234543432565",
+      phoneNumber: "+79261457894",
+      time: DateTime.parse("2019-07-20 20:18:04Z"),
+      seatNumber: 44),
+  Client(
+      name: "Петя",
+      barcode: "23436345254",
+      phoneNumber: "+79241557694",
+      time: DateTime.parse("2019-07-20 20:19:04Z"),
+      seatNumber: 14),
+  Client(
+      name: "Маша",
+      barcode: "96968565849",
+      phoneNumber: "+79061447824",
+      time: DateTime.parse("2019-07-20 20:12:04Z"),
+      seatNumber: 3),
+  Client(
+      name: "Света",
+      barcode: "25958438573475",
+      phoneNumber: "+7999345333",
+      time: DateTime.parse("2019-07-20 20:20:04Z"),
+      seatNumber: 2)
 ];
 
 class SessionRoute extends StatefulWidget {
@@ -142,9 +143,7 @@ class _SessionRouteState extends State<SessionRoute> {
           _clients.add(modifiedClient);
         });
       } else {
-        final found =
-            _clients.firstWhere((item) => item.hashCode == client.hashCode);
-        setState(() => found.fill(modifiedClient));
+        setState(() => client.fill(modifiedClient));
       }
     }
   }

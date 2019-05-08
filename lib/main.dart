@@ -39,14 +39,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Widget _buildSessions() {
     return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: _sessions.length * 2 - 1, // including dividers
-        itemBuilder: (context, i) {
-          if (i.isOdd) return Divider();
+      padding: const EdgeInsets.all(16.0),
+      itemCount: _sessions.length * 2 - 1, // including dividers
+      itemBuilder: (context, i) {
+        if (i.isOdd) return Divider();
 
-          final index = i ~/ 2;
-          return _buildRow(_sessions[index]);
-        });
+        final index = i ~/ 2;
+        return _buildRow(_sessions[index]);
+      },
+    );
   }
 
   Widget _buildRow(Session session) {
@@ -64,9 +65,7 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
                       child: Text(
                         session.name,
-                        style: TextStyle(
-                          fontSize: 18.0,
-                        ),
+                        style: TextStyle(fontSize: 18.0),
                       ),
                     ),
                     Padding(
@@ -105,15 +104,11 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (modifiedSession != null) {
-      if (session == null) {
-        setState(() {
+      setState(() {
+        if (session == null) {
           _sessions.add(modifiedSession);
-        });
-      } else {
-        final found =
-            _sessions.firstWhere((item) => item.hashCode == session.hashCode);
-        setState(() => found.fill(modifiedSession));
-      }
+        }
+      });
     }
   }
 
@@ -134,7 +129,7 @@ class _HomePageState extends State<HomePage> {
       body: _buildSessions(),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _displaySessionBuilder(context),
-        tooltip: 'Increment',
+        tooltip: 'Добавить сеанс',
         child: Icon(Icons.add),
       ),
     );

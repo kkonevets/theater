@@ -2,18 +2,30 @@ import 'package:flutter/material.dart';
 import 'session.dart';
 
 class SessionBuilder extends StatefulWidget {
-  final Session session;
+  Session session;
 
-  SessionBuilder({Key key, this.session}) : super(key: key);
+  SessionBuilder({Key key, this.session}) : super(key: key) {
+    if (session == null) {
+      session = Session(time: DateTime.now());
+    }
+  }
 
   @override
-  _SessionBuilderState createState() => _SessionBuilderState();
+  _SessionBuilderState createState() => _SessionBuilderState(session);
 }
 
 class _SessionBuilderState extends State<SessionBuilder> {
-  bool firstBuild = true;
+  final Session session;
   final nameController = TextEditingController();
   final totalSeatsController = TextEditingController();
+
+  _SessionBuilderState(this.session) {
+    if (session != null) {
+      nameController.text = session.name;
+      totalSeatsController.text =
+          session.totalSeats == null ? "" : session.totalSeats.toString();
+    }
+  }
 
   @override
   void dispose() {
@@ -25,15 +37,6 @@ class _SessionBuilderState extends State<SessionBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    var superSession = super.widget.session;
-    if (firstBuild && superSession != null) {
-      nameController.text = superSession.name;
-      totalSeatsController.text = superSession.totalSeats == null
-          ? 0
-          : superSession.totalSeats.toString();
-      firstBuild = false;
-    }
-
     return SimpleDialog(children: <Widget>[
       Padding(
           padding: const EdgeInsets.all(16.0),
@@ -60,15 +63,10 @@ class _SessionBuilderState extends State<SessionBuilder> {
                     RaisedButton(
                         onPressed: () {
                           if (nameController.text.isNotEmpty) {
-                            var session = Session(
-                              name: nameController.text,
-                              totalSeats: totalSeatsController.text == ""
-                                  ? 0
-                                  : int.parse(totalSeatsController.text),
-                              time: superSession == null
-                                  ? DateTime.now()
-                                  : superSession.time,
-                            );
+                            session.name = nameController.text;
+                            session.totalSeats = totalSeatsController.text == ""
+                                ? 0
+                                : int.parse(totalSeatsController.text);
                             Navigator.pop(context, session);
                           }
                         },
