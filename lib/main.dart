@@ -51,49 +51,52 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildRow(Session session) {
-    return Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            GestureDetector(
-                onTap: () => _pushSession(session),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
-                      child: Text(
-                        session.name,
-                        style: TextStyle(fontSize: 18.0),
-                      ),
+    return InkWell(
+      onTap: () => _pushSession(session),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding:
+                        const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
+                    child: Text(
+                      session.name,
+                      style: TextStyle(fontSize: 18.0),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
-                      child: Text(
-                        DateFormat.Hm().format(session.time),
-                        style: TextStyle(fontSize: 15.0),
-                      ),
-                    ),
-                  ],
-                )),
-            GestureDetector(
-                onTap: () => _displaySessionBuilder(context, session),
-                child: Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(Icons.edit),
-                      ),
-                    ],
                   ),
-                )),
-          ],
-        ),
-      ],
+                  Padding(
+                    padding:
+                        const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
+                    child: Text(
+                      DateFormat.Hm().format(session.time),
+                      style: TextStyle(fontSize: 15.0),
+                    ),
+                  ),
+                ],
+              ),
+              InkWell(
+                  onTap: () => _displaySessionBuilder(context, session),
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.edit),
+                        ),
+                      ],
+                    ),
+                  )),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

@@ -68,7 +68,7 @@ class _SessionRouteState extends State<SessionRoute> {
       }
     }
 
-    return GestureDetector(
+    return InkWell(
       onTap: () => _displayClientBuilder(context, client),
       child: Column(
         children: <Widget>[
