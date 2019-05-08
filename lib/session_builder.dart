@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'session.dart';
 
 class SessionBuilder extends StatefulWidget {
@@ -43,7 +44,9 @@ class _SessionBuilderState extends State<SessionBuilder> {
               decoration: InputDecoration(labelText: 'Имя сеанса'),
             ),
             TextFormField(
-              keyboardType: TextInputType.number,
+              inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(
+                  signed: false, decimal: false),
               controller: totalSeatsController,
               decoration: InputDecoration(labelText: 'количество мест'),
             ),

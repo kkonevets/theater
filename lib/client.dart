@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:intl/intl.dart';
 
 class Client {
@@ -78,14 +80,21 @@ class _ClientBuilderState extends State<ClientBuilder> {
             ),
             TextField(
               controller: phoneController,
+              keyboardType: TextInputType.phone,
               decoration: InputDecoration(labelText: 'телефон'),
             ),
             TextField(
               controller: barcodeController,
+              inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(
+                  signed: false, decimal: false),
               decoration: InputDecoration(labelText: 'штрих-код'),
             ),
             TextField(
               controller: seatNumberController,
+              inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(
+                  signed: false, decimal: false),
               decoration: InputDecoration(labelText: 'номер места'),
             ),
             CheckboxListTile(
