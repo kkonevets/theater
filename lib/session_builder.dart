@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 import 'session.dart';
 
 class SessionBuilder extends StatefulWidget {
-  Session session;
+  final Session session;
 
-  SessionBuilder({Key key, this.session}) : super(key: key) {
-    if (session == null) {
-      session = Session(time: DateTime.now());
-    }
-  }
+  SessionBuilder({Key key, this.session}) : super(key: key);
 
   @override
   _SessionBuilderState createState() => _SessionBuilderState(session);

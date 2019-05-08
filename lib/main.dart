@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 )),
             GestureDetector(
-                onTap: () => _displaySessionBuilder(context, session: session),
+                onTap: () => _displaySessionBuilder(context, session),
                 child: Padding(
                   padding: const EdgeInsets.all(3.0),
                   child: Column(
@@ -97,19 +97,19 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _displaySessionBuilder(BuildContext context, {Session session}) async {
-    final Session modifiedSession = await showDialog(
+  _displaySessionBuilder(BuildContext context, [Session session]) async {
+
+    if (session == null){
+      session = Session(time: DateTime.now());
+      _sessions.add(session);
+    }
+
+    await showDialog(
       context: context,
       builder: (context) => SessionBuilder(session: session),
     );
 
-    if (modifiedSession != null) {
-      setState(() {
-        if (session == null) {
-          _sessions.add(modifiedSession);
-        }
-      });
-    }
+    setState(() {});
   }
 
   void _pushSession(Session session) {
@@ -128,7 +128,8 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _buildSessions(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _displaySessionBuilder(context),
+        onPressed: () =>
+            _displaySessionBuilder(context),
         tooltip: 'Добавить сеанс',
         child: Icon(Icons.add),
       ),
