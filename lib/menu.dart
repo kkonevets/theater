@@ -17,9 +17,7 @@ class MenuDrawer extends StatelessWidget {
             accountName: Text("Алексей Иванов"),
             accountEmail: Text("aivanov@gmail.com"),
             currentAccountPicture: CircleAvatar(
-              backgroundColor: Theme.of(context).platform == TargetPlatform.iOS
-                  ? Colors.blue
-                  : Colors.white,
+              backgroundColor: Colors.white,
               child: Text(
                 "A",
                 style: TextStyle(fontSize: 40.0),
