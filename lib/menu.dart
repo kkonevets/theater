@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'settings.dart';
 import 'package:theater/session_list.dart';
 
 class MenuDrawer extends StatelessWidget {
@@ -49,8 +50,9 @@ class MenuDrawer extends StatelessWidget {
             ),
             onTap: () {
               Navigator.of(context).pop();
-//              Navigator.of(context).push(MaterialPageRoute(
-//                  builder: (BuildContext context) => NewPage("Page two")));
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => SettingsBuilder(),
+              ));
             },
           ),
         ],

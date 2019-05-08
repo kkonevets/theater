@@ -72,7 +72,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
           padding: const EdgeInsets.all(16.0),
           child: Column(children: [
             TextField(
-              autofocus: true,
+//              autofocus: true,
               controller: nameController,
               decoration: InputDecoration(labelText: "имя"),
             ),
