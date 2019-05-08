@@ -49,25 +49,6 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  _displaySessionBuilder(BuildContext context, {Session session}) async {
-    final Session modifiedSession = await showDialog(
-      context: context,
-      builder: (context) => SessionBuilder(session: session),
-    );
-
-    if (modifiedSession != null) {
-      if (session == null) {
-        setState(() {
-          _sessions.add(modifiedSession);
-        });
-      } else {
-        final found =
-            _sessions.firstWhere((item) => item.hashCode == session.hashCode);
-        setState(() => found.fill(modifiedSession));
-      }
-    }
-  }
-
   Widget _buildRow(Session session) {
     return Column(
       children: <Widget>[
@@ -117,6 +98,25 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  _displaySessionBuilder(BuildContext context, {Session session}) async {
+    final Session modifiedSession = await showDialog(
+      context: context,
+      builder: (context) => SessionBuilder(session: session),
+    );
+
+    if (modifiedSession != null) {
+      if (session == null) {
+        setState(() {
+          _sessions.add(modifiedSession);
+        });
+      } else {
+        final found =
+            _sessions.firstWhere((item) => item.hashCode == session.hashCode);
+        setState(() => found.fill(modifiedSession));
+      }
+    }
+  }
+
   void _pushSession(Session session) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -132,12 +132,11 @@ class _HomePageState extends State<HomePage> {
         title: Text(widget.title),
       ),
       body: _buildSessions(),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () => _displaySessionBuilder(context),
         tooltip: 'Increment',
         child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
