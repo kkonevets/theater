@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 
 import 'package:intl/intl.dart';
 
@@ -88,7 +89,12 @@ class _ClientBuilderState extends State<ClientBuilder> {
               inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
               keyboardType: TextInputType.numberWithOptions(
                   signed: false, decimal: false),
-              decoration: InputDecoration(labelText: 'штрих-код'),
+              decoration: InputDecoration(
+                  labelText: 'штрих-код',
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.camera_alt),
+                    onPressed: () => {},
+                  )),
             ),
             TextField(
               controller: seatNumberController,
