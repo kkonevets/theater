@@ -70,6 +70,25 @@ class _ClientBuilderState extends State<ClientBuilder> {
       }
     }
 
+    void _scanBarcode() async {
+      try {
+        String barcode = await BarcodeScanner.scan();
+        setState(() {
+          barcodeController.text = barcode;
+        });
+      } on PlatformException catch (e) {
+        if (e.code == BarcodeScanner.CameraAccessDenied) {
+          setState(() {
+            barcodeController.text = "No camera permission";
+          });
+        } else {
+          setState(() {
+            barcodeController.text = "Unknown error";
+          });
+        }
+      }
+    }
+
     return SimpleDialog(children: <Widget>[
       Padding(
           padding: const EdgeInsets.all(16.0),
@@ -92,9 +111,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
               decoration: InputDecoration(
                   labelText: 'штрих-код',
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.camera_alt),
-                    onPressed: () => {},
-                  )),
+                      icon: Icon(Icons.camera_alt), onPressed: _scanBarcode)),
             ),
             TextField(
               controller: seatNumberController,
