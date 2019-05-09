@@ -31,12 +31,11 @@ class Session extends Record {
   int totalSeats;
 
   @override
-  Session.fromMap(Map<String, dynamic> map) {
-    id = map["_id"];
-    name = map[name];
-    time = DateTime.fromMicrosecondsSinceEpoch(map[time]);
-    totalSeats = map[totalSeats];
-  }
+  Session.fromMap(Map<String, dynamic> map)
+      : id = map["_id"],
+        name = map['name'],
+        time = DateTime.fromMicrosecondsSinceEpoch(map['time']),
+        totalSeats = map['totalSeats'];
 
   @override
   Map<String, dynamic> toMap() {
@@ -74,16 +73,15 @@ class Client extends Record {
   bool isPresent;
 
   @override
-  Client.fromMap(Map<String, dynamic> map) {
-    id = map["_id"];
-    sessionId = map['sessionId'];
-    name = map['name'];
-    barcode = map['barcode'];
-    phoneNumber = map['phoneNumber'];
-    time = DateTime.fromMicrosecondsSinceEpoch(map[time]);
-    seatNumber = map['seatNumber'];
-    isPresent = map['isPresent'];
-  }
+  Client.fromMap(Map<String, dynamic> map)
+      : id = map["_id"],
+        sessionId = map['sessionId'],
+        name = map['name'],
+        barcode = map['barcode'],
+        phoneNumber = map['phoneNumber'],
+        time = DateTime.fromMicrosecondsSinceEpoch(map['time']),
+        seatNumber = map['seatNumber'],
+        isPresent = map['isPresent'];
 
   @override
   Map<String, dynamic> toMap() {
@@ -156,7 +154,6 @@ class DatabaseHelper {
         )
       """,
     );
-
   }
 
   Future<int> insert(Record rec) async {
