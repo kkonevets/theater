@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'settings.dart';
-import 'package:theater/session_list.dart';
+import 'session_list.dart';
+
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({

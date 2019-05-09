@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:theater/menu.dart';
+import 'client_list.dart';
 import 'session.dart';
-import 'session_builder.dart';
+import 'database_helpers.dart';
 
 List<Session> _sessions = [
   Session(

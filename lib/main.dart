@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:theater/session_list.dart';
 
 class MyApp extends StatelessWidget {
@@ -8,4 +9,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void main() => runApp(MyApp());
+void main() async {
+  runApp(MyApp());
+}

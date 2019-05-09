@@ -1,25 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:barcode_scan/barcode_scan.dart';
-
 import 'package:intl/intl.dart';
-
-class Client {
-  Client(
-      {this.name,
-      this.barcode,
-      this.phoneNumber,
-      this.time,
-      this.seatNumber,
-      this.isPresent});
-
-  String name;
-  String barcode;
-  String phoneNumber;
-  DateTime time;
-  int seatNumber;
-  bool isPresent;
-}
+import 'database_helpers.dart';
 
 class ClientBuilder extends StatefulWidget {
   final Client client;
