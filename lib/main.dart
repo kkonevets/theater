@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:theater/session_list.dart';
+import 'package:theater/init_test.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -10,5 +11,7 @@ class MyApp extends StatelessWidget {
 }
 
 void main() async {
+  initializeTestData();
+
   runApp(MyApp());
 }

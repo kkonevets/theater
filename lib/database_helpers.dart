@@ -21,7 +21,7 @@ abstract class Record {
 }
 
 class Session extends Record {
-  final String tableName = 'session';
+  final String tableName = 'sessions';
 
   Session({this.name, this.time, this.totalSeats}) : super();
 
@@ -34,7 +34,7 @@ class Session extends Record {
   Session.fromMap(Map<String, dynamic> map) {
     id = map["_id"];
     name = map[name];
-    time = map[time];
+    time = DateTime.fromMicrosecondsSinceEpoch(map[time]);
     totalSeats = map[totalSeats];
   }
 
@@ -42,7 +42,7 @@ class Session extends Record {
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       'name': name,
-      'time': time,
+      'time': time.millisecondsSinceEpoch,
       'totalSeats': totalSeats,
     };
     if (id != null) {
@@ -53,7 +53,7 @@ class Session extends Record {
 }
 
 class Client extends Record {
-  final String tableName = 'client';
+  final String tableName = 'clients';
 
   Client(
       {this.name,
@@ -65,6 +65,7 @@ class Client extends Record {
       : super();
 
   int id;
+  int sessionId;
   String name;
   String barcode;
   String phoneNumber;
@@ -75,12 +76,13 @@ class Client extends Record {
   @override
   Client.fromMap(Map<String, dynamic> map) {
     id = map["_id"];
-    name = map[name];
-    barcode = map[barcode];
-    phoneNumber = map[phoneNumber];
-    time = map[time];
-    seatNumber = map[seatNumber];
-    isPresent = map[isPresent];
+    sessionId = map['sessionId'];
+    name = map['name'];
+    barcode = map['barcode'];
+    phoneNumber = map['phoneNumber'];
+    time = DateTime.fromMicrosecondsSinceEpoch(map[time]);
+    seatNumber = map['seatNumber'];
+    isPresent = map['isPresent'];
   }
 
   @override
@@ -89,12 +91,15 @@ class Client extends Record {
       'name': name,
       'barcode': barcode,
       'phoneNumber': phoneNumber,
-      'time': time,
+      'time': time.millisecondsSinceEpoch,
       'seatNumber': seatNumber,
       'isPresent': isPresent
     };
     if (id != null) {
       map['_id'] = id;
+    }
+    if (sessionId != null) {
+      map['sessionId'] = sessionId;
     }
     return map;
   }
@@ -134,13 +139,14 @@ class DatabaseHelper {
           time INTEGER,
           totalSeats INTEGER
         )
-    """,
+      """,
     );
 
     db.execute(
       """
         CREATE TABLE clients(
-          id INTEGER PRIMARY KEY, 
+          id INTEGER PRIMARY KEY,
+          sessionId INTEGER,
           name TEXT, 
           barcode TEXT,
           phoneNumber TEXT,
@@ -148,8 +154,9 @@ class DatabaseHelper {
           seatNumber INTEGER,
           isPresent INTEGER
         )
-    """,
+      """,
     );
+
   }
 
   Future<int> insert(Record rec) async {
