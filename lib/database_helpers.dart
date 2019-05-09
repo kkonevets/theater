@@ -1,10 +1,12 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-abstract class Mapper {
-  Mapper();
+abstract class Record {
+  String tableName;
 
-  factory Mapper.fromMap(Map<String, dynamic> map, String tableName) {
+  Record();
+
+  factory Record.fromMap(Map<String, dynamic> map, String tableName) {
     switch (tableName) {
       case 'session':
         return Session.fromMap(map);
@@ -18,7 +20,9 @@ abstract class Mapper {
   Map<String, dynamic> toMap();
 }
 
-class Session extends Mapper {
+class Session extends Record {
+  final String tableName = 'session';
+
   Session({this.name, this.time, this.totalSeats}) : super();
 
   int id;
@@ -48,7 +52,9 @@ class Session extends Mapper {
   }
 }
 
-class Client extends Mapper {
+class Client extends Record {
+  final String tableName = 'client';
+
   Client(
       {this.name,
       this.barcode,
@@ -146,13 +152,20 @@ class DatabaseHelper {
     );
   }
 
-  Future<Mapper> queryRecord(String tableName, int id) async {
+  Future<int> insert(Record rec) async {
+    Database db = await database;
+
+    int id = await db.insert(rec.tableName, rec.toMap());
+    return id;
+  }
+
+  Future<Record> queryRecord(String tableName, int id) async {
     Database db = await database;
 
     List<Map> maps = await db
         .query(tableName, columns: null, where: '_id = ?', whereArgs: [id]);
     if (maps.length > 0) {
-      return Mapper.fromMap(maps.first, tableName);
+      return Record.fromMap(maps.first, tableName);
     }
     return null;
   }
