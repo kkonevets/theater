@@ -4,7 +4,6 @@ import 'package:theater/menu.dart';
 import 'session.dart';
 import 'session_builder.dart';
 
-
 List<Session> _sessions = [
   Session(
       name: "Сеанс 1",
@@ -31,15 +30,13 @@ class SessionList extends StatefulWidget {
 
 class _SessionListState extends State<SessionList> {
   Widget _buildSessions() {
-    return ListView.builder(
+    return ListView.separated(
       padding: const EdgeInsets.all(16.0),
-      itemCount: _sessions.length * 2 - 1, // including dividers
+      itemCount: _sessions.length, // including dividers
       itemBuilder: (context, i) {
-        if (i.isOdd) return Divider();
-
-        final index = i ~/ 2;
-        return _buildRow(_sessions[index]);
+        return _buildRow(_sessions[i]);
       },
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
     );
   }
 

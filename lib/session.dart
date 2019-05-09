@@ -47,11 +47,13 @@ class SessionRoute extends StatefulWidget {
 
 class _SessionRouteState extends State<SessionRoute> {
   Widget _buildClients() {
-    return ListView.builder(
-        itemCount: _clients.length,
-        itemBuilder: (context, index) {
-          return _buildRow(_clients[index]);
-        });
+    return ListView.separated(
+      itemCount: _clients.length,
+      itemBuilder: (context, index) {
+        return _buildRow(_clients[index]);
+      },
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+    );
   }
 
   Widget _buildRow(Client client) {
@@ -96,28 +98,18 @@ class _SessionRouteState extends State<SessionRoute> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(3.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Checkbox(
-                        value:
-                            client.isPresent == null ? false : client.isPresent,
-                        onChanged: isPresentOnChanged,
-                      ),
-                    ),
-                  ],
-                ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Checkbox(
+                    value:
+                        client.isPresent == null ? false : client.isPresent,
+                    onChanged: isPresentOnChanged,
+                  ),
+                ],
               ),
             ],
           ),
-          Divider(
-            height: 2.0,
-            color: Colors.grey,
-          )
         ],
       ),
     );

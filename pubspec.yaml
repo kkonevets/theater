@@ -25,6 +25,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   localstorage: ^1.2.0
   barcode_scan: ^0.0.8
+  sqflite:
+  path:
   intl:
 
 
