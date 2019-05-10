@@ -5,6 +5,7 @@ import 'package:theater/client_list.dart';
 import 'package:theater/session.dart';
 import 'package:theater/models.dart';
 import 'package:theater/bloc.dart';
+import 'package:theater/common.dart';
 
 class SessionList extends StatefulWidget {
   SessionList({Key key}) : super(key: key);
@@ -39,30 +40,18 @@ class _SessionListState extends State<SessionList> {
                 separatorBuilder: (BuildContext context, int index) =>
                     const Divider(),
               );
+            } else {
+              return Container(
+                  child: Center(
+                child: emptyListMessageWidget(),
+              ));
             }
           } else {
             return Center(
-              child: loadingData(),
+              child: loadingData(sessionBloc),
             );
           }
         });
-  }
-
-  Widget loadingData() {
-    //pull todos again
-    sessionBloc.getItems();
-    return Container(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircularProgressIndicator(),
-            Text("Loading...",
-                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w500))
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildRow(Session session) {
@@ -166,3 +155,4 @@ class _SessionListState extends State<SessionList> {
     );
   }
 }
+

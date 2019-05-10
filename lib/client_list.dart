@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'client.dart';
 import 'package:theater/models.dart';
 import 'package:theater/bloc.dart';
+import 'package:theater/common.dart';
 
 class SessionRoute extends StatefulWidget {
   final Session session;
@@ -41,30 +42,18 @@ class _SessionRouteState extends State<SessionRoute> {
                 separatorBuilder: (BuildContext context, int index) =>
                     const Divider(),
               );
+            } else {
+              return Container(
+                  child: Center(
+                child: emptyListMessageWidget(),
+              ));
             }
           } else {
             return Center(
-              child: loadingData(),
+              child: loadingData(clientBloc),
             );
           }
         });
-  }
-
-  Widget loadingData() {
-    //pull todos again
-    clientBloc.getItems();
-    return Container(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircularProgressIndicator(),
-            Text("Loading...",
-                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w500))
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildRow(Client client) {
