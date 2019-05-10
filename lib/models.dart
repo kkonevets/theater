@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 abstract class Record {
   int id;
   String name;
@@ -57,7 +59,8 @@ class Client extends Record {
   bool isPresent;
 
   Client(
-      {String name,
+      {@required this.sessionId,
+      String name,
       this.barcode,
       this.phoneNumber,
       DateTime time,
@@ -71,7 +74,7 @@ class Client extends Record {
         barcode = map['barcode'],
         phoneNumber = map['phoneNumber'],
         seatNumber = map['seatNumber'],
-        isPresent = map['isPresent'],
+        isPresent = map['isPresent'] == 0 ? false : true,
         super(
             id: map["id"],
             name: map['name'],
@@ -86,7 +89,7 @@ class Client extends Record {
       'phoneNumber': phoneNumber,
       'time': time.millisecondsSinceEpoch,
       'seatNumber': seatNumber,
-      'isPresent': isPresent
+      'isPresent': isPresent == false ? 0 : 1
     };
     if (id != null) {
       map['id'] = id;

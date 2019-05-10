@@ -1,34 +1,7 @@
 import 'package:flutter/material.dart';
 import 'client.dart';
 import 'package:theater/models.dart';
-
-
-List<Client> _clients = [
-  Client(
-      name: "Вася",
-      barcode: "234543432565",
-      phoneNumber: "+79261457894",
-      time: DateTime.parse("2019-07-20 20:18:04Z"),
-      seatNumber: 44),
-  Client(
-      name: "Петя",
-      barcode: "23436345254",
-      phoneNumber: "+79241557694",
-      time: DateTime.parse("2019-07-20 20:19:04Z"),
-      seatNumber: 14),
-  Client(
-      name: "Маша",
-      barcode: "96968565849",
-      phoneNumber: "+79061447824",
-      time: DateTime.parse("2019-07-20 20:12:04Z"),
-      seatNumber: 3),
-  Client(
-      name: "Света",
-      barcode: "25958438573475",
-      phoneNumber: "+7999345333",
-      time: DateTime.parse("2019-07-20 20:20:04Z"),
-      seatNumber: 2)
-];
+import 'package:theater/bloc.dart';
 
 class SessionRoute extends StatefulWidget {
   final Session session;
@@ -36,17 +9,61 @@ class SessionRoute extends StatefulWidget {
   SessionRoute({Key key, @required this.session}) : super(key: key);
 
   @override
-  _SessionRouteState createState() => _SessionRouteState();
+  _SessionRouteState createState() => _SessionRouteState(session: session);
 }
 
 class _SessionRouteState extends State<SessionRoute> {
+  final Session session;
+
+  Bloc clientBloc;
+
+  _SessionRouteState({this.session})
+      : clientBloc = Bloc(tableName: 'clients', sessionId: session.id);
+
+  dispose() {
+    clientBloc.dispose();
+    super.dispose();
+  }
+
   Widget _buildClients() {
-    return ListView.separated(
-      itemCount: _clients.length,
-      itemBuilder: (context, index) {
-        return _buildRow(_clients[index]);
-      },
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
+    return StreamBuilder(
+        stream: clientBloc.stream,
+        builder: (BuildContext context, AsyncSnapshot<List<Record>> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length > 0) {
+              return ListView.separated(
+                padding: const EdgeInsets.all(16.0),
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, itemPosition) {
+                  Client client = snapshot.data[itemPosition];
+                  return _buildRow(client);
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(),
+              );
+            }
+          } else {
+            return Center(
+              child: loadingData(),
+            );
+          }
+        });
+  }
+
+  Widget loadingData() {
+    //pull todos again
+    clientBloc.getItems();
+    return Container(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CircularProgressIndicator(),
+            Text("Loading...",
+                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w500))
+          ],
+        ),
+      ),
     );
   }
 
@@ -113,7 +130,8 @@ class _SessionRouteState extends State<SessionRoute> {
 
     if (client == null) {
       anew = true;
-      client = Client(time: DateTime.now(), isPresent: true);
+      client =
+          Client(time: DateTime.now(), isPresent: true, sessionId: session.id);
     }
 
     final Client modifiedClient = await showDialog(
@@ -122,8 +140,12 @@ class _SessionRouteState extends State<SessionRoute> {
     );
 
     setState(() {
-      if (modifiedClient != null && anew) {
-        _clients.add(modifiedClient);
+      if (modifiedClient != null) {
+        if (anew) {
+          clientBloc.add(client);
+        } else {
+          clientBloc.update(client);
+        }
       }
     });
   }

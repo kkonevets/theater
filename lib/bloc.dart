@@ -12,7 +12,7 @@ class Bloc {
 
   final _controller = StreamController<List<Record>>.broadcast();
 
-  get items => _controller.stream;
+  get stream => _controller.stream;
 
   Bloc({this.tableName, this.sessionId}) {
     getItems();
@@ -34,7 +34,7 @@ class Bloc {
   }
 
   delete(Record rec) async {
-    await _helper.delete(rec);
+    _helper.delete(rec);
     getItems();
   }
 

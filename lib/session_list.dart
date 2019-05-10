@@ -25,7 +25,7 @@ class _SessionListState extends State<SessionList> {
 
   Widget _buildSessions() {
     return StreamBuilder(
-        stream: sessionBloc.items,
+        stream: sessionBloc.stream,
         builder: (BuildContext context, AsyncSnapshot<List<Record>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
@@ -42,11 +42,6 @@ class _SessionListState extends State<SessionList> {
             }
           } else {
             return Center(
-              /*since most of our I/O operations are done
-        outside the main thread asynchronously
-        we may want to display a loading indicator
-        to let the use know the app is currently
-        processing*/
               child: loadingData(),
             );
           }
