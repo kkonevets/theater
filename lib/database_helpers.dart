@@ -80,7 +80,7 @@ class DatabaseHelper {
     return id;
   }
 
-  Future<int> updateTodo(Record rec) async {
+  Future<int> update(Record rec) async {
     final db = await database;
 
     var result = await db.update(rec.tableName, rec.toMap(),
@@ -89,7 +89,15 @@ class DatabaseHelper {
     return result;
   }
 
-  Future<Record> queryRecord(String tableName, int id) async {
+  Future<int> delete(Record rec) async {
+    final db = await database;
+    var result =
+        await db.delete(rec.tableName, where: 'id = ?', whereArgs: [rec.id]);
+
+    return result;
+  }
+
+  Future<Record> read(String tableName, int id) async {
     final Database db = await database;
 
     List<Map> maps = await db
