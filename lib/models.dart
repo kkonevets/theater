@@ -21,6 +21,12 @@ abstract class Record {
 }
 
 class Client extends Record {
+  int sessionId;
+  String barcode;
+  String phoneNumber;
+  int seatNumber;
+  bool isPresent;
+
   Client(
       {String name,
       this.barcode,
@@ -29,12 +35,6 @@ class Client extends Record {
       this.seatNumber,
       this.isPresent = false})
       : super(name: name, time: time, tableName: "clients");
-
-  int sessionId;
-  String barcode;
-  String phoneNumber;
-  int seatNumber;
-  bool isPresent;
 
   @override
   Client.fromMap(Map<String, dynamic> map)
@@ -46,7 +46,8 @@ class Client extends Record {
         super(
             id: map["_id"],
             name: map['name'],
-            time: DateTime.fromMicrosecondsSinceEpoch(map['time']));
+            time: DateTime.fromMicrosecondsSinceEpoch(map['time']),
+            tableName: "clients");
 
   @override
   Map<String, dynamic> toMap() {
@@ -78,10 +79,10 @@ class Session extends Record {
   Session.fromMap(Map<String, dynamic> map)
       : totalSeats = map['totalSeats'],
         super(
-          id: map["_id"],
-          name: map['name'],
-          time: DateTime.fromMicrosecondsSinceEpoch(map['time']),
-        );
+            id: map["_id"],
+            name: map['name'],
+            time: DateTime.fromMicrosecondsSinceEpoch(map['time']),
+            tableName: "sessions");
 
   @override
   Map<String, dynamic> toMap() {
