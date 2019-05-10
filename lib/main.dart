@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
 }
 
 void main() async {
-  initializeTestData();
+  await initializeTestData();
 
   runApp(MyApp());
 }

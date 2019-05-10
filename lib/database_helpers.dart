@@ -101,7 +101,7 @@ class DatabaseHelper {
     final Database db = await database;
 
     List<Map> maps = await db
-        .query(tableName, columns: null, where: '_id = ?', whereArgs: [id]);
+        .query(tableName, columns: null, where: 'id = ?', whereArgs: [id]);
     if (maps.length > 0) {
       return Record.fromMap(maps.first, tableName);
     }

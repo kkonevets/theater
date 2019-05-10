@@ -74,7 +74,7 @@ List<Client> _clients = [
       seatNumber: 9)
 ];
 
-void initializeTestData() async {
+Future initializeTestData() async {
   DatabaseHelper helper = DatabaseHelper.instance;
 
   int frac = (_clients.length / _sessions.length).truncate();

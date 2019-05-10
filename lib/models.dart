@@ -8,9 +8,9 @@ abstract class Record {
 
   factory Record.fromMap(Map<String, dynamic> map, String tableName) {
     switch (tableName) {
-      case 'session':
+      case 'sessions':
         return Session.fromMap(map);
-      case 'client':
+      case 'clients':
         return Client.fromMap(map);
       default:
         return null;
@@ -30,7 +30,7 @@ class Session extends Record {
   Session.fromMap(Map<String, dynamic> map)
       : totalSeats = map['totalSeats'],
         super(
-            id: map["_id"],
+            id: map["id"],
             name: map['name'],
             time: DateTime.fromMicrosecondsSinceEpoch(map['time']),
             tableName: "sessions");
@@ -43,7 +43,7 @@ class Session extends Record {
       'totalSeats': totalSeats,
     };
     if (id != null) {
-      map['_id'] = id;
+      map['id'] = id;
     }
     return map;
   }
@@ -73,7 +73,7 @@ class Client extends Record {
         seatNumber = map['seatNumber'],
         isPresent = map['isPresent'],
         super(
-            id: map["_id"],
+            id: map["id"],
             name: map['name'],
             time: DateTime.fromMicrosecondsSinceEpoch(map['time']),
             tableName: "clients");
@@ -89,7 +89,7 @@ class Client extends Record {
       'isPresent': isPresent
     };
     if (id != null) {
-      map['_id'] = id;
+      map['id'] = id;
     }
     if (sessionId != null) {
       map['sessionId'] = sessionId;

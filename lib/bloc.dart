@@ -2,7 +2,10 @@ import 'package:theater/models.dart';
 import 'package:theater/database_helpers.dart';
 import 'dart:async';
 
-class Block {
+/*
+Business Logic Component Architecture Design Pattern
+*/
+class Bloc {
   DatabaseHelper _helper = DatabaseHelper.instance;
   String tableName;
   int sessionId;
@@ -11,7 +14,7 @@ class Block {
 
   get items => _controller.stream;
 
-  Block({this.tableName, this.sessionId}) {
+  Bloc({this.tableName, this.sessionId}) {
     getItems();
   }
 

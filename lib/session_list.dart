@@ -4,21 +4,7 @@ import 'package:theater/menu.dart';
 import 'package:theater/client_list.dart';
 import 'package:theater/session.dart';
 import 'package:theater/models.dart';
-
-List<Session> _sessions = [
-  Session(
-      name: "Сеанс 1",
-      time: DateTime.parse("2019-07-20 10:05:04Z"),
-      totalSeats: 33),
-  Session(
-      name: "Сеанс 2",
-      time: DateTime.parse("2019-07-20 14:20:04Z"),
-      totalSeats: 40),
-  Session(
-      name: "Сеанс 3",
-      time: DateTime.parse("2019-07-20 20:45:04Z"),
-      totalSeats: 60),
-];
+import 'package:theater/bloc.dart';
 
 class SessionList extends StatefulWidget {
   SessionList({Key key}) : super(key: key);
@@ -30,14 +16,57 @@ class SessionList extends StatefulWidget {
 }
 
 class _SessionListState extends State<SessionList> {
+  final Bloc sessionBloc = Bloc(tableName: 'sessions');
+
+  dispose() {
+    sessionBloc.dispose();
+    super.dispose();
+  }
+
   Widget _buildSessions() {
-    return ListView.separated(
-      padding: const EdgeInsets.all(16.0),
-      itemCount: _sessions.length, // including dividers
-      itemBuilder: (context, i) {
-        return _buildRow(_sessions[i]);
-      },
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
+    return StreamBuilder(
+        stream: sessionBloc.items,
+        builder: (BuildContext context, AsyncSnapshot<List<Record>> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length > 0) {
+              return ListView.separated(
+                padding: const EdgeInsets.all(16.0),
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, itemPosition) {
+                  Session session = snapshot.data[itemPosition];
+                  return _buildRow(session);
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(),
+              );
+            }
+          } else {
+            return Center(
+              /*since most of our I/O operations are done
+        outside the main thread asynchronously
+        we may want to display a loading indicator
+        to let the use know the app is currently
+        processing*/
+              child: loadingData(),
+            );
+          }
+        });
+  }
+
+  Widget loadingData() {
+    //pull todos again
+    sessionBloc.getItems();
+    return Container(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CircularProgressIndicator(),
+            Text("Loading...",
+                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w500))
+          ],
+        ),
+      ),
     );
   }
 
@@ -102,8 +131,12 @@ class _SessionListState extends State<SessionList> {
     );
 
     setState(() {
-      if (modifiedSession != null && anew) {
-        _sessions.add(session);
+      if (modifiedSession != null) {
+        if (anew) {
+          sessionBloc.add(session);
+        } else {
+          sessionBloc.update(session);
+        }
       }
     });
   }
