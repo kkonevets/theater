@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:theater/models.dart';
@@ -53,6 +55,11 @@ class DatabaseHelper {
         )
       """,
     );
+  }
+
+  Future<bool> dbExists() async{
+    String path = join(await getDatabasesPath(), _databaseName);
+    return File(path).existsSync();
   }
 
   Future<List<Record>> getAll(String tableName,
