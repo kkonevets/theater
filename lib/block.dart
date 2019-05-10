@@ -5,31 +5,34 @@ import 'dart:async';
 class Block {
   DatabaseHelper _helper = DatabaseHelper.instance;
   String tableName;
+  int sessionId;
 
   final _controller = StreamController<List<Record>>.broadcast();
 
   get items => _controller.stream;
 
-  Block({this.tableName});
+  Block({this.tableName, this.sessionId}) {
+    getItems();
+  }
 
-  getList({int sessionId}) async {
+  getItems() async {
     List<Record> result = await _helper.getAll(tableName, sessionId: sessionId);
     _controller.sink.add(result);
   }
 
   add(Record rec) async {
     await _helper.insert(rec);
-    getList();
+    getItems();
   }
 
   update(Record rec) async {
     await _helper.update(rec);
-    getList();
+    getItems();
   }
 
   delete(Record rec) async {
     await _helper.delete(rec);
-    getList();
+    getItems();
   }
 
   dispose() {
