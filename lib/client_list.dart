@@ -26,36 +26,6 @@ class _SessionRouteState extends State<SessionRoute> {
     super.dispose();
   }
 
-  Widget _buildClients() {
-    return StreamBuilder(
-        stream: clientBloc.stream,
-        builder: (BuildContext context, AsyncSnapshot<List<Record>> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              return ListView.separated(
-                padding: const EdgeInsets.all(16.0),
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, itemPosition) {
-                  Client client = snapshot.data[itemPosition];
-                  return _buildRow(client);
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-              );
-            } else {
-              return Container(
-                  child: Center(
-                child: emptyListMessageWidget(),
-              ));
-            }
-          } else {
-            return Center(
-              child: loadingData(clientBloc),
-            );
-          }
-        });
-  }
-
   Widget _buildRow(Client client) {
     String rowText = "";
     if (client.seatNumber != null) {
@@ -145,7 +115,7 @@ class _SessionRouteState extends State<SessionRoute> {
       appBar: AppBar(
         title: Text(super.widget.session.name),
       ),
-      body: _buildClients(),
+      body: buildStreamList(clientBloc, _buildRow),
 
       floatingActionButton: FloatingActionButton(
         onPressed: () => _displayClientBuilder(context),

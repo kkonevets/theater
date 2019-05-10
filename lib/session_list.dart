@@ -24,36 +24,6 @@ class _SessionListState extends State<SessionList> {
     super.dispose();
   }
 
-  Widget _buildSessions() {
-    return StreamBuilder(
-        stream: sessionBloc.stream,
-        builder: (BuildContext context, AsyncSnapshot<List<Record>> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              return ListView.separated(
-                padding: const EdgeInsets.all(16.0),
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, itemPosition) {
-                  Session session = snapshot.data[itemPosition];
-                  return _buildRow(session);
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(),
-              );
-            } else {
-              return Container(
-                  child: Center(
-                child: emptyListMessageWidget(),
-              ));
-            }
-          } else {
-            return Center(
-              child: loadingData(sessionBloc),
-            );
-          }
-        });
-  }
-
   Widget _buildRow(Session session) {
     return InkWell(
       onTap: () => _pushSession(session),
@@ -146,7 +116,7 @@ class _SessionListState extends State<SessionList> {
           ),
         ],
       ),
-      body: _buildSessions(),
+      body: buildStreamList(sessionBloc, _buildRow),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _displaySessionBuilder(context),
         tooltip: 'Добавить сеанс',
@@ -155,4 +125,3 @@ class _SessionListState extends State<SessionList> {
     );
   }
 }
-
