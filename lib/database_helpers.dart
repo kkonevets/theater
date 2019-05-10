@@ -1,107 +1,6 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
-abstract class Record {
-  String tableName;
-
-  Record();
-
-  factory Record.fromMap(Map<String, dynamic> map, String tableName) {
-    switch (tableName) {
-      case 'session':
-        return Session.fromMap(map);
-      case 'client':
-        return Client.fromMap(map);
-      default:
-        return null;
-    }
-  }
-
-  Map<String, dynamic> toMap();
-}
-
-class Session extends Record {
-  final String tableName = 'sessions';
-
-  Session({this.name, this.time, this.totalSeats}) : super();
-
-  int id;
-  String name;
-  DateTime time;
-  int totalSeats;
-
-  @override
-  Session.fromMap(Map<String, dynamic> map)
-      : id = map["_id"],
-        name = map['name'],
-        time = DateTime.fromMicrosecondsSinceEpoch(map['time']),
-        totalSeats = map['totalSeats'];
-
-  @override
-  Map<String, dynamic> toMap() {
-    var map = <String, dynamic>{
-      'name': name,
-      'time': time.millisecondsSinceEpoch,
-      'totalSeats': totalSeats,
-    };
-    if (id != null) {
-      map['_id'] = id;
-    }
-    return map;
-  }
-}
-
-class Client extends Record {
-  final String tableName = 'clients';
-
-  Client(
-      {this.name,
-      this.barcode,
-      this.phoneNumber,
-      this.time,
-      this.seatNumber,
-      this.isPresent})
-      : super();
-
-  int id;
-  int sessionId;
-  String name;
-  String barcode;
-  String phoneNumber;
-  DateTime time;
-  int seatNumber;
-  bool isPresent;
-
-  @override
-  Client.fromMap(Map<String, dynamic> map)
-      : id = map["_id"],
-        sessionId = map['sessionId'],
-        name = map['name'],
-        barcode = map['barcode'],
-        phoneNumber = map['phoneNumber'],
-        time = DateTime.fromMicrosecondsSinceEpoch(map['time']),
-        seatNumber = map['seatNumber'],
-        isPresent = map['isPresent'];
-
-  @override
-  Map<String, dynamic> toMap() {
-    var map = <String, dynamic>{
-      'name': name,
-      'barcode': barcode,
-      'phoneNumber': phoneNumber,
-      'time': time.millisecondsSinceEpoch,
-      'seatNumber': seatNumber,
-      'isPresent': isPresent
-    };
-    if (id != null) {
-      map['_id'] = id;
-    }
-    if (sessionId != null) {
-      map['sessionId'] = sessionId;
-    }
-    return map;
-  }
-}
+import 'package:theater/models.dart';
 
 class DatabaseHelper {
   static final _databaseName = "theater.db";
@@ -156,15 +55,42 @@ class DatabaseHelper {
     );
   }
 
+  Future<List<Record>> getAll(String tableName,
+      {List<String> columns, int sessionId}) async {
+    final Database db = await database;
+
+    List<Map<String, dynamic>> result;
+    if (sessionId != null) {
+      result = await db.query(tableName,
+          columns: columns, where: 'sessionId = ?', whereArgs: [sessionId]);
+    } else {
+      result = await db.query(tableName, columns: columns);
+    }
+
+    List<Record> items = result.isNotEmpty
+        ? result.map((item) => Record.fromMap(item, tableName)).toList()
+        : [];
+    return items;
+  }
+
   Future<int> insert(Record rec) async {
-    Database db = await database;
+    final Database db = await database;
 
     int id = await db.insert(rec.tableName, rec.toMap());
     return id;
   }
 
+  Future<int> updateTodo(Record rec) async {
+    final db = await database;
+
+    var result = await db.update(rec.tableName, rec.toMap(),
+        where: "id = ?", whereArgs: [rec.id]);
+
+    return result;
+  }
+
   Future<Record> queryRecord(String tableName, int id) async {
-    Database db = await database;
+    final Database db = await database;
 
     List<Map> maps = await db
         .query(tableName, columns: null, where: '_id = ?', whereArgs: [id]);

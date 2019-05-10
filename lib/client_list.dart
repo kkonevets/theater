@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'client.dart';
-import 'database_helpers.dart';
+import 'package:theater/models.dart';
 
 
 List<Client> _clients = [

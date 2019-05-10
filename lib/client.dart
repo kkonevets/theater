@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:intl/intl.dart';
-import 'database_helpers.dart';
+import 'package:theater/models.dart';
 
 class ClientBuilder extends StatefulWidget {
   final Client client;

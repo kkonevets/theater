@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'database_helpers.dart';
+import 'package:theater/models.dart';
 
 class SessionBuilder extends StatefulWidget {
   final Session session;

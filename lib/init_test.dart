@@ -1,4 +1,6 @@
-import 'database_helpers.dart';
+import 'package:theater/models.dart';
+import 'package:theater/database_helpers.dart';
+
 
 List<Session> _sessions = [
   Session(
@@ -39,41 +41,42 @@ List<Client> _clients = [
       barcode: "25958438573475",
       phoneNumber: "+7999345333",
       time: DateTime.parse("2019-07-20 20:44:04Z"),
-      seatNumber: 2),
+      seatNumber: 12),
   Client(
       name: "Вова",
       barcode: "2543857347234",
       phoneNumber: "+7945593453",
       time: DateTime.parse("2019-07-20 20:15:04Z"),
-      seatNumber: 2),
+      seatNumber: 5),
   Client(
       name: "Гага",
       barcode: "259523238475",
       phoneNumber: "+7999345333",
       time: DateTime.parse("2019-07-20 20:13:04Z"),
-      seatNumber: 2),
+      seatNumber: 6),
   Client(
       name: "Тетя",
       barcode: "438544473475",
       phoneNumber: "+7899557333",
       time: DateTime.parse("2019-07-20 20:23:04Z"),
-      seatNumber: 2),
+      seatNumber: 7),
   Client(
       name: "Анна",
       barcode: "3465644577",
       phoneNumber: "+734547534",
       time: DateTime.parse("2019-07-20 20:21:04Z"),
-      seatNumber: 2),
+      seatNumber: 8),
   Client(
       name: "Федя",
       barcode: "2567653423",
       phoneNumber: "+790087654",
       time: DateTime.parse("2019-07-20 20:22:04Z"),
-      seatNumber: 2)
+      seatNumber: 9)
 ];
 
 void initializeTestData() async {
   DatabaseHelper helper = DatabaseHelper.instance;
+
   int frac = (_clients.length / _sessions.length).truncate();
 
   int i = 0;
@@ -83,6 +86,6 @@ void initializeTestData() async {
       client.sessionId = sessionId;
       int id = await helper.insert(client);
     }
-    i += 1;
+    i += frac;
   }
 }
