@@ -20,6 +20,35 @@ abstract class Record {
   Map<String, dynamic> toMap();
 }
 
+class Session extends Record {
+  int totalSeats;
+
+  Session({String name, DateTime time, this.totalSeats})
+      : super(name: name, time: time, tableName: "sessions");
+
+  @override
+  Session.fromMap(Map<String, dynamic> map)
+      : totalSeats = map['totalSeats'],
+        super(
+            id: map["_id"],
+            name: map['name'],
+            time: DateTime.fromMicrosecondsSinceEpoch(map['time']),
+            tableName: "sessions");
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = <String, dynamic>{
+      'name': name,
+      'time': time.millisecondsSinceEpoch,
+      'totalSeats': totalSeats,
+    };
+    if (id != null) {
+      map['_id'] = id;
+    }
+    return map;
+  }
+}
+
 class Client extends Record {
   int sessionId;
   String barcode;
@@ -64,35 +93,6 @@ class Client extends Record {
     }
     if (sessionId != null) {
       map['sessionId'] = sessionId;
-    }
-    return map;
-  }
-}
-
-class Session extends Record {
-  int totalSeats;
-
-  Session({String name, DateTime time, this.totalSeats})
-      : super(name: name, time: time, tableName: "sessions");
-
-  @override
-  Session.fromMap(Map<String, dynamic> map)
-      : totalSeats = map['totalSeats'],
-        super(
-            id: map["_id"],
-            name: map['name'],
-            time: DateTime.fromMicrosecondsSinceEpoch(map['time']),
-            tableName: "sessions");
-
-  @override
-  Map<String, dynamic> toMap() {
-    var map = <String, dynamic>{
-      'name': name,
-      'time': time.millisecondsSinceEpoch,
-      'totalSeats': totalSeats,
-    };
-    if (id != null) {
-      map['_id'] = id;
     }
     return map;
   }
