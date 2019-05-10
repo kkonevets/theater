@@ -34,7 +34,7 @@ class Session extends Record {
         super(
             id: map["id"],
             name: map['name'],
-            time: DateTime.fromMicrosecondsSinceEpoch(map['time']),
+            time: DateTime.fromMillisecondsSinceEpoch(map['time']),
             tableName: "sessions");
 
   @override
