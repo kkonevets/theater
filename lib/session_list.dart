@@ -88,7 +88,8 @@ class _SessionListState extends State<SessionList> {
     bool anew = false;
     if (session == null) {
       anew = true;
-      session = Session(time: DateTime.now());
+      DateTime time = DateTime.now();
+      session = Session(time: time);
     }
 
     final DismissDialogAction action = await Navigator.push(

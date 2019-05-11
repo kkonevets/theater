@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:theater/bloc.dart';
 import 'package:theater/models.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 enum DismissDialogAction {
   cancel,
@@ -79,6 +80,8 @@ class DateTimeItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
+    initializeDateFormatting("ru_RU", null);
+
     return DefaultTextStyle(
       style: theme.textTheme.subhead,
       child: Row(
@@ -92,11 +95,12 @@ class DateTimeItem extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   showDatePicker(
-                    context: context,
-                    initialDate: date,
-                    firstDate: date.subtract(const Duration(days: 30)),
-                    lastDate: date.add(const Duration(days: 30)),
-                  ).then<void>((DateTime value) {
+                          context: context,
+                          initialDate: date,
+                          firstDate: date.subtract(const Duration(days: 30)),
+                          lastDate: date.add(const Duration(days: 30)),
+                          locale: Locale('ru', 'RU'))
+                      .then<void>((DateTime value) {
                     if (value != null)
                       onChanged(DateTime(value.year, value.month, value.day,
                           time.hour, time.minute));
@@ -105,7 +109,7 @@ class DateTimeItem extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(DateFormat('EEE, MMM d yyyy').format(date)),
+                    Text(DateFormat('EEE, d MMM yyyy', 'ru').format(date)),
                     const Icon(Icons.arrow_drop_down, color: Colors.black54),
                   ],
                 ),
