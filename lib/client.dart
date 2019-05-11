@@ -108,7 +108,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
         ],
       ),
       body: Builder(
-        builder: (context) => Form(
+        builder: (innerContext) => Form(
               onWillPop: _onWillPop,
               child: ListView(
                 padding: const EdgeInsets.all(16.0),
@@ -196,7 +196,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
                         suffixIcon: IconButton(
                             iconSize: 35,
                             icon: Icon(Icons.camera_alt),
-                            onPressed: () => _scanBarcode(context))),
+                            onPressed: () => _scanBarcode(innerContext))),
                   ),
                 ],
               ),

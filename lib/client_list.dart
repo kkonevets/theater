@@ -140,10 +140,10 @@ class _SessionRouteState extends State<SessionRoute> {
     return Scaffold(
       appBar: AppBar(title: Text(super.widget.session.name), actions: <Widget>[
         Builder(
-            builder: (context) => IconButton(
+            builder: (innerContext) => IconButton(
                 iconSize: 35,
                 icon: Icon(Icons.camera_alt),
-                onPressed: () => _scanBarcodeInList(context))),
+                onPressed: () => _scanBarcodeInList(innerContext))),
       ]),
       body: buildStreamList(clientBloc, _buildRow),
 
