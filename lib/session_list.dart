@@ -79,13 +79,13 @@ class _SessionListState extends State<SessionList> {
       session = Session(time: DateTime.now());
     }
 
-    final Session modifiedSession = await showDialog(
+    final bool save = await showDialog(
       context: context,
       builder: (context) => SessionBuilder(session: session),
     );
 
     setState(() {
-      if (modifiedSession != null) {
+      if (save) {
         if (anew) {
           sessionBloc.add(session);
         } else {

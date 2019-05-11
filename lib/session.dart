@@ -56,7 +56,7 @@ class _SessionBuilderState extends State<SessionBuilder> {
                   children: <Widget>[
                     FlatButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          Navigator.of(context).pop(false);
                         },
                         child: const Text('Отмена')),
                     RaisedButton(
@@ -66,7 +66,7 @@ class _SessionBuilderState extends State<SessionBuilder> {
                             session.totalSeats =
                                 int.tryParse(totalSeatsController.text);
 
-                            Navigator.pop(context, session);
+                            Navigator.of(context).pop(true);
                           }
                         },
                         child: const Text('Ok')),

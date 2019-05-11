@@ -93,13 +93,13 @@ class _SessionRouteState extends State<SessionRoute> {
           Client(time: DateTime.now(), isPresent: true, sessionId: session.id);
     }
 
-    final Client modifiedClient = await showDialog(
+    final bool save = await showDialog(
       context: context,
       builder: (context) => ClientBuilder(client: client),
     );
 
     setState(() {
-      if (modifiedClient != null) {
+      if (save) {
         if (anew) {
           clientBloc.add(client);
         } else {

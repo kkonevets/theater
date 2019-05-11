@@ -119,7 +119,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
                   children: <Widget>[
                     FlatButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          Navigator.of(context).pop(false);
                         },
                         child: const Text('Отмена')),
                     RaisedButton(
@@ -132,7 +132,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
                             client.seatNumber =
                                 int.tryParse(seatNumberController.text);
 
-                            Navigator.pop(context, client);
+                            Navigator.pop(context, true);
                           }
                         },
                         child: const Text('Ok')),
