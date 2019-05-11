@@ -129,7 +129,7 @@ class _SessionRouteState extends State<SessionRoute> {
     if (client == null) {
       anew = true;
       client = Client(
-          time: toMscTime(DateTime.now()),
+          time: DateTime.now(),
           isPresent: true,
           sessionId: session.id);
     }

@@ -10,7 +10,7 @@ enum DismissDialogAction {
   save,
 }
 
-DateTime toMscTime(DateTime time){
+DateTime toMscTime(DateTime time) {
   return time.toUtc().add(Duration(hours: 3));
 }
 
