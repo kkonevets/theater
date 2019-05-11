@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:theater/models.dart';
+import 'package:theater/common.dart';
 
 class SessionBuilder extends StatefulWidget {
   final Session session;
@@ -15,10 +16,17 @@ class _SessionBuilderState extends State<SessionBuilder> {
   final Session session;
   final nameController = TextEditingController();
   final totalSeatsController = TextEditingController();
+  DateTime _fromDateTime = DateTime.now();
+  bool _saveNeeded = false;
+
+  bool _hasName = false;
+  String _eventName;
 
   _SessionBuilderState(this.session) {
     if (session != null) {
       nameController.text = session.name;
+      _eventName = session.name;
+      _hasName = true;
       totalSeatsController.text =
           session.totalSeats == null ? "" : session.totalSeats.toString();
     }
@@ -32,47 +40,88 @@ class _SessionBuilderState extends State<SessionBuilder> {
     super.dispose();
   }
 
+  Future<bool> _onWillPop() async {
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(children: <Widget>[
-      Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(children: [
-            TextField(
-              autofocus: true,
+    final ThemeData theme = Theme.of(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_hasName ? _eventName : 'Имя сеанса'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('SAVE',
+                style: theme.textTheme.body1.copyWith(color: Colors.white)),
+            onPressed: () {
+              if (nameController.text.isNotEmpty) {
+                session.name = nameController.text;
+                session.totalSeats = int.tryParse(totalSeatsController.text);
+              }
+
+              Navigator.pop(context, DismissDialogAction.save);
+            },
+          ),
+        ],
+      ),
+      body: Form(
+        onWillPop: _onWillPop,
+        child: ListView(padding: const EdgeInsets.all(16.0), children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            alignment: Alignment.bottomLeft,
+            child: TextField(
               controller: nameController,
-              decoration: InputDecoration(labelText: 'Имя сеанса'),
+              autofocus: true,
+              decoration: const InputDecoration(
+                labelText: 'Имя сеанса',
+                filled: true,
+              ),
+              style: theme.textTheme.title,
+              onChanged: (String value) {
+                setState(() {
+                  _hasName = value.isNotEmpty;
+                  if (_hasName) {
+                    _eventName = value;
+                  }
+                });
+              },
             ),
-            TextFormField(
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            alignment: Alignment.bottomLeft,
+            child: TextFormField(
+              style: theme.textTheme.title,
               inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
               keyboardType: TextInputType.numberWithOptions(
                   signed: false, decimal: false),
               controller: totalSeatsController,
-              decoration: InputDecoration(labelText: 'количество мест'),
+              decoration: InputDecoration(
+                labelText: 'количество мест',
+                filled: true,
+              ),
             ),
-            Align(
-                alignment: Alignment.centerRight,
-                child: Wrap(
-                  children: <Widget>[
-                    FlatButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                        child: const Text('Отмена')),
-                    RaisedButton(
-                        onPressed: () {
-                          if (nameController.text.isNotEmpty) {
-                            session.name = nameController.text;
-                            session.totalSeats =
-                                int.tryParse(totalSeatsController.text);
-
-                            Navigator.of(context).pop(true);
-                          }
-                        },
-                        child: const Text('Ok')),
-                  ],
-                ))
-          ]))
-    ]);
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text('From', style: theme.textTheme.caption),
+              DateTimeItem(
+                dateTime: _fromDateTime,
+                onChanged: (DateTime value) {
+                  setState(() {
+                    _fromDateTime = value;
+                    _saveNeeded = true;
+                  });
+                },
+              ),
+            ],
+          ),
+        ]),
+      ),
+    );
   }
 }

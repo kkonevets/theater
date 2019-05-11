@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:intl/intl.dart';
 import 'package:theater/models.dart';
+import 'package:theater/common.dart';
 
 class ClientBuilder extends StatefulWidget {
   final Client client;
@@ -21,9 +22,14 @@ class _ClientBuilderState extends State<ClientBuilder> {
   final barcodeController = TextEditingController();
   final seatNumberController = TextEditingController();
 
+  bool _hasName = false;
+  String _eventName;
+
   _ClientBuilderState(this.client) {
     if (client != null) {
       nameController.text = client.name;
+      _eventName = client.name;
+      _hasName = true;
       phoneController.text = client.phoneNumber;
       barcodeController.text = client.barcode;
       seatNumberController.text =
@@ -45,11 +51,16 @@ class _ClientBuilderState extends State<ClientBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+
     Widget getDateTimeFormat() {
       if (client == null) {
         return Text("");
       } else {
-        return Text(DateFormat.Hm().format(client.time));
+        return Text(
+          DateFormat.Hm().format(client.time),
+          style: theme.textTheme.subhead,
+        );
       }
     }
 
@@ -72,19 +83,102 @@ class _ClientBuilderState extends State<ClientBuilder> {
       }
     }
 
-    return SimpleDialog(children: <Widget>[
-      Padding(
+    Future<bool> _onWillPop() async {
+      return true;
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_hasName ? _eventName : 'Имя клиента'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('SAVE',
+                style: theme.textTheme.body1.copyWith(color: Colors.white)),
+            onPressed: () {
+              if (nameController.text.isNotEmpty) {
+                client.name = nameController.text;
+                client.phoneNumber = phoneController.text;
+                client.barcode = barcodeController.text;
+                client.isPresent = isPresent;
+                client.seatNumber = int.tryParse(seatNumberController.text);
+              }
+
+              Navigator.pop(context, DismissDialogAction.save);
+            },
+          ),
+        ],
+      ),
+      body: Form(
+        onWillPop: _onWillPop,
+        child: ListView(
           padding: const EdgeInsets.all(16.0),
-          child: Column(children: [
-            TextField(
-//              autofocus: true,
-              controller: nameController,
-              decoration: InputDecoration(labelText: "имя"),
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              alignment: Alignment.bottomLeft,
+              child: TextField(
+                controller: nameController,
+                autofocus: true,
+                decoration: const InputDecoration(
+                  labelText: 'Имя',
+                  filled: true,
+                ),
+                style: theme.textTheme.title,
+                onChanged: (String value) {
+                  setState(() {
+                    _hasName = value.isNotEmpty;
+                    if (_hasName) {
+                      _eventName = value;
+                    }
+                  });
+                },
+              ),
             ),
-            TextField(
-              controller: phoneController,
-              keyboardType: TextInputType.phone,
-              decoration: InputDecoration(labelText: 'телефон'),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              alignment: Alignment.bottomLeft,
+              child: TextFormField(
+                style: theme.textTheme.title,
+                inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.phone,
+                controller: phoneController,
+                decoration: InputDecoration(
+                  labelText: 'телефон',
+                  filled: true,
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              alignment: Alignment.bottomLeft,
+              child: TextField(
+                style: theme.textTheme.title,
+                controller: seatNumberController,
+                inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(
+                    signed: false, decimal: false),
+                decoration: InputDecoration(
+                  labelText: 'номер места',
+                  filled: true,
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              alignment: Alignment.bottomLeft,
+              child: CheckboxListTile(
+                value: isPresent,
+                title: Text(
+                  'присутствует',
+                  style: theme.textTheme.title,
+                ),
+                subtitle: getDateTimeFormat(),
+                onChanged: (bool value) {
+                  setState(() {
+                    isPresent = value;
+                  });
+                },
+              ),
             ),
             TextField(
               controller: barcodeController,
@@ -94,51 +188,13 @@ class _ClientBuilderState extends State<ClientBuilder> {
               decoration: InputDecoration(
                   labelText: 'штрих-код',
                   suffixIcon: IconButton(
-                      icon: Icon(Icons.camera_alt), onPressed: _scanBarcode)),
+                      iconSize: 35,
+                      icon: Icon(Icons.camera_alt),
+                      onPressed: _scanBarcode)),
             ),
-            TextField(
-              controller: seatNumberController,
-              inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-              keyboardType: TextInputType.numberWithOptions(
-                  signed: false, decimal: false),
-              decoration: InputDecoration(labelText: 'номер места'),
-            ),
-            CheckboxListTile(
-              value: isPresent,
-              title: Text('присутствует'),
-              subtitle: getDateTimeFormat(),
-              onChanged: (bool value) {
-                setState(() {
-                  isPresent = value;
-                });
-              },
-            ),
-            Align(
-                alignment: Alignment.centerRight,
-                child: Wrap(
-                  children: <Widget>[
-                    FlatButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                        child: const Text('Отмена')),
-                    RaisedButton(
-                        onPressed: () {
-                          if (nameController.text.isNotEmpty) {
-                            client.name = nameController.text;
-                            client.phoneNumber = phoneController.text;
-                            client.barcode = barcodeController.text;
-                            client.isPresent = isPresent;
-                            client.seatNumber =
-                                int.tryParse(seatNumberController.text);
-
-                            Navigator.pop(context, true);
-                          }
-                        },
-                        child: const Text('Ok')),
-                  ],
-                ))
-          ]))
-    ]);
+          ],
+        ),
+      ),
+    );
   }
 }

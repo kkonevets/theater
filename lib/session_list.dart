@@ -52,7 +52,7 @@ class _SessionListState extends State<SessionList> {
                 ],
               ),
               InkWell(
-                  onTap: () => _displaySessionBuilder(context, session),
+                  onTap: () => _pushSessionBuilder(session: session),
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
                     child: Column(
@@ -103,6 +103,15 @@ class _SessionListState extends State<SessionList> {
     );
   }
 
+  void _pushSessionBuilder({Session session}) {
+    Navigator.push(
+        context,
+        MaterialPageRoute<DismissDialogAction>(
+          builder: (BuildContext context) => SessionBuilder(session: session),
+          fullscreenDialog: true,
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +127,7 @@ class _SessionListState extends State<SessionList> {
       ),
       body: buildStreamList(sessionBloc, _buildRow),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _displaySessionBuilder(context),
+        onPressed: _pushSessionBuilder,
         tooltip: 'Добавить сеанс',
         child: Icon(Icons.add),
       ),

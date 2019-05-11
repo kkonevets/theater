@@ -41,7 +41,7 @@ class _SessionRouteState extends State<SessionRoute> {
     }
 
     return InkWell(
-      onTap: () => _displayClientBuilder(context, client),
+      onTap: () => _pushClientBuilder(client: client),
       child: Column(
         children: <Widget>[
           Row(
@@ -109,6 +109,15 @@ class _SessionRouteState extends State<SessionRoute> {
     });
   }
 
+  void _pushClientBuilder({Client client}) {
+    Navigator.push(
+        context,
+        MaterialPageRoute<DismissDialogAction>(
+          builder: (BuildContext context) => ClientBuilder(client: client),
+          fullscreenDialog: true,
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +127,7 @@ class _SessionRouteState extends State<SessionRoute> {
       body: buildStreamList(clientBloc, _buildRow),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _displayClientBuilder(context),
+        onPressed: _pushClientBuilder,
         tooltip: 'Добавить зрителя',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
