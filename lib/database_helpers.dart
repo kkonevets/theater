@@ -57,7 +57,7 @@ class DatabaseHelper {
     );
   }
 
-  Future<bool> dbExists() async{
+  Future<bool> dbExists() async {
     String path = join(await getDatabasesPath(), _databaseName);
     return File(path).existsSync();
   }
@@ -104,11 +104,30 @@ class DatabaseHelper {
     return result;
   }
 
-  Future<Record> read(String tableName, int id) async {
+  Future<Record> getByID(String tableName, int id) async {
     final Database db = await database;
 
     List<Map> maps = await db
         .query(tableName, columns: null, where: 'id = ?', whereArgs: [id]);
+    if (maps.length > 0) {
+      return Record.fromMap(maps.first, tableName);
+    }
+    return null;
+  }
+
+  Future<Record> getByBarcode(String tableName, String barcode,
+      {Session session}) async {
+    final Database db = await database;
+
+    String where = 'barcode = ?';
+    List<dynamic> whereArgs = [barcode];
+    if (session != null) {
+      where += "AND sessionId = ?";
+      whereArgs.add(session.id);
+    }
+
+    List<Map> maps = await db.query(tableName,
+        columns: null, where: where, whereArgs: whereArgs);
     if (maps.length > 0) {
       return Record.fromMap(maps.first, tableName);
     }

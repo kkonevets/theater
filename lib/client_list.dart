@@ -38,6 +38,7 @@ class _SessionRouteState extends State<SessionRoute> {
       if (client != null) {
         setState(() {
           client.isPresent = value;
+          clientBloc.update(client);
         });
       }
     }
@@ -89,22 +90,32 @@ class _SessionRouteState extends State<SessionRoute> {
   void _scanBarcodeInList(BuildContext context) async {
     try {
       String barcode = await BarcodeScanner.scan();
+      Client client = await clientBloc.getByBarcode(barcode, session: session);
+
+      if (client != null) {
+        if (client.isPresent == null || client.isPresent == false) {
+          _pushClientBuilder(client: client);
+        } else {
+          showMessage(context, "Такой штрихкод уже есть", color: Colors.yellow);
+        }
+      } else {
+        showMessage(context, "Не найдено", color: Colors.red);
+      }
+
       setState(() {
 //        barcodeController.text = barcode;
       });
-    } catch (e) {
+    } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
           showMessage(context, "No camera permission");
-//          barcodeController.text = "No camera permission";
         });
       } else {
         setState(() {
           showMessage(context, "Unknown error");
-
-//          barcodeController.text = "Unknown error";
         });
       }
+      return;
     }
   }
 

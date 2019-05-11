@@ -23,6 +23,14 @@ class Bloc {
     _controller.sink.add(result);
   }
 
+  getByID(int id) async {
+    return await _helper.getByID(tableName, id);
+  }
+
+  getByBarcode(String barcode, {Session session}) async {
+    return await _helper.getByBarcode(tableName, barcode, session: session);
+  }
+
   add(Record rec) async {
     await _helper.insert(rec);
     getItems();
