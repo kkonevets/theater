@@ -16,7 +16,7 @@ class _SessionBuilderState extends State<SessionBuilder> {
   final Session session;
   final nameController = TextEditingController();
   final totalSeatsController = TextEditingController();
-  DateTime _fromDateTime = DateTime.now();
+  DateTime _fromDateTime = toMscTime(DateTime.now());
   bool _saveNeeded = false;
 
   bool _hasName = false;

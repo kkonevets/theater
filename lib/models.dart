@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:theater/common.dart';
 
 abstract class Record {
   int id;
@@ -34,7 +35,7 @@ class Session extends Record {
         super(
             id: map["id"],
             name: map['name'],
-            time: DateTime.fromMillisecondsSinceEpoch(map['time']),
+            time: toMscTime(DateTime.fromMillisecondsSinceEpoch(map['time'])),
             tableName: "sessions");
 
   @override
@@ -78,7 +79,7 @@ class Client extends Record {
         super(
             id: map["id"],
             name: map['name'],
-            time: DateTime.fromMillisecondsSinceEpoch(map['time']),
+            time: toMscTime(DateTime.fromMillisecondsSinceEpoch(map['time'])),
             tableName: "clients");
 
   @override

@@ -5,6 +5,7 @@ import 'package:theater/bloc.dart';
 import 'package:theater/common.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
+import 'package:theater/common.dart';
 
 class SessionRoute extends StatefulWidget {
   final Session session;
@@ -126,8 +127,10 @@ class _SessionRouteState extends State<SessionRoute> {
 
     if (client == null) {
       anew = true;
-      client =
-          Client(time: DateTime.now(), isPresent: true, sessionId: session.id);
+      client = Client(
+          time: toMscTime(DateTime.now()),
+          isPresent: true,
+          sessionId: session.id);
     }
 
     final DismissDialogAction action = await Navigator.push(

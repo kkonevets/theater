@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:theater/bloc.dart';
 import 'package:theater/models.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
+//import 'package:intl/date_symbol_data_local.dart';
 
 enum DismissDialogAction {
   cancel,
   discard,
   save,
+}
+
+DateTime toMscTime(DateTime time){
+  return time.toUtc().add(Duration(hours: 3));
 }
 
 Widget buildStreamList(Bloc bloc, Function buildRow) {
@@ -79,8 +83,6 @@ class DateTimeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-
-    initializeDateFormatting("ru_RU", null);
 
     return DefaultTextStyle(
       style: theme.textTheme.subhead,

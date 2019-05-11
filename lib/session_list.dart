@@ -88,7 +88,7 @@ class _SessionListState extends State<SessionList> {
     bool anew = false;
     if (session == null) {
       anew = true;
-      DateTime time = DateTime.now();
+      DateTime time = toMscTime(DateTime.now());
       session = Session(time: time);
     }
 
