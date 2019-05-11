@@ -35,7 +35,7 @@ class Session extends Record {
         super(
             id: map["id"],
             name: map['name'],
-            time: toMscTime(DateTime.fromMillisecondsSinceEpoch(map['time'])),
+            time: DateTime.fromMillisecondsSinceEpoch(map['time'], isUtc: true),
             tableName: "sessions");
 
   @override
@@ -79,7 +79,7 @@ class Client extends Record {
         super(
             id: map["id"],
             name: map['name'],
-            time: toMscTime(DateTime.fromMillisecondsSinceEpoch(map['time'])),
+            time: DateTime.fromMillisecondsSinceEpoch(map['time'], isUtc: true),
             tableName: "clients");
 
   @override
