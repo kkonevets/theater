@@ -3,6 +3,8 @@ import 'client.dart';
 import 'package:theater/models.dart';
 import 'package:theater/bloc.dart';
 import 'package:theater/common.dart';
+import 'package:barcode_scan/barcode_scan.dart';
+import 'package:flutter/services.dart';
 
 class SessionRoute extends StatefulWidget {
   final Session session;
@@ -84,6 +86,28 @@ class _SessionRouteState extends State<SessionRoute> {
     );
   }
 
+  void _scanBarcodeInList(BuildContext context) async {
+    try {
+      String barcode = await BarcodeScanner.scan();
+      setState(() {
+//        barcodeController.text = barcode;
+      });
+    } catch (e) {
+      if (e.code == BarcodeScanner.CameraAccessDenied) {
+        setState(() {
+          showMessage(context, "No camera permission");
+//          barcodeController.text = "No camera permission";
+        });
+      } else {
+        setState(() {
+          showMessage(context, "Unknown error");
+
+//          barcodeController.text = "Unknown error";
+        });
+      }
+    }
+  }
+
   void _pushClientBuilder({Client client}) async {
     bool anew = false;
 
@@ -114,9 +138,13 @@ class _SessionRouteState extends State<SessionRoute> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(super.widget.session.name),
-      ),
+      appBar: AppBar(title: Text(super.widget.session.name), actions: <Widget>[
+        Builder(
+            builder: (context) => IconButton(
+                iconSize: 35,
+                icon: Icon(Icons.camera_alt),
+                onPressed: () => _scanBarcodeInList(context))),
+      ]),
       body: buildStreamList(clientBloc, _buildRow),
 
       floatingActionButton: FloatingActionButton(

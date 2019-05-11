@@ -64,7 +64,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
       }
     }
 
-    void _scanBarcode() async {
+    void _scanBarcode(BuildContext context) async {
       try {
         String barcode = await BarcodeScanner.scan();
         setState(() {
@@ -73,11 +73,11 @@ class _ClientBuilderState extends State<ClientBuilder> {
       } on PlatformException catch (e) {
         if (e.code == BarcodeScanner.CameraAccessDenied) {
           setState(() {
-            barcodeController.text = "No camera permission";
+            showMessage(context, "No camera permission");
           });
         } else {
           setState(() {
-            barcodeController.text = "Unknown error";
+            showMessage(context, "Unknown error");
           });
         }
       }
@@ -107,92 +107,100 @@ class _ClientBuilderState extends State<ClientBuilder> {
           ),
         ],
       ),
-      body: Form(
-        onWillPop: _onWillPop,
-        child: ListView(
-          padding: const EdgeInsets.all(16.0),
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              alignment: Alignment.bottomLeft,
-              child: TextField(
-                controller: nameController,
+      body: Builder(
+        builder: (context) => Form(
+              onWillPop: _onWillPop,
+              child: ListView(
+                padding: const EdgeInsets.all(16.0),
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    alignment: Alignment.bottomLeft,
+                    child: TextField(
+                      controller: nameController,
 //                autofocus: true,
-                decoration: const InputDecoration(
-                  labelText: 'Имя',
-                  filled: true,
-                ),
-                style: theme.textTheme.title,
-                onChanged: (String value) {
-                  setState(() {
-                    _hasName = value.isNotEmpty;
-                    if (_hasName) {
-                      _eventName = value;
-                    }
-                  });
-                },
+                      decoration: const InputDecoration(
+                        labelText: 'Имя',
+                        filled: true,
+                      ),
+                      style: theme.textTheme.title,
+                      onChanged: (String value) {
+                        setState(() {
+                          _hasName = value.isNotEmpty;
+                          if (_hasName) {
+                            _eventName = value;
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    alignment: Alignment.bottomLeft,
+                    child: TextFormField(
+                      style: theme.textTheme.title,
+                      inputFormatters: [
+                        WhitelistingTextInputFormatter.digitsOnly
+                      ],
+                      keyboardType: TextInputType.phone,
+                      controller: phoneController,
+                      decoration: InputDecoration(
+                        labelText: 'телефон',
+                        filled: true,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    alignment: Alignment.bottomLeft,
+                    child: TextField(
+                      style: theme.textTheme.title,
+                      controller: seatNumberController,
+                      inputFormatters: [
+                        WhitelistingTextInputFormatter.digitsOnly
+                      ],
+                      keyboardType: TextInputType.numberWithOptions(
+                          signed: false, decimal: false),
+                      decoration: InputDecoration(
+                        labelText: 'номер места',
+                        filled: true,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    alignment: Alignment.bottomLeft,
+                    child: CheckboxListTile(
+                      value: isPresent,
+                      title: Text(
+                        'присутствует',
+                        style: theme.textTheme.title,
+                      ),
+                      subtitle: getDateTimeFormat(),
+                      onChanged: (bool value) {
+                        setState(() {
+                          isPresent = value;
+                        });
+                      },
+                    ),
+                  ),
+                  TextField(
+                    controller: barcodeController,
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    keyboardType: TextInputType.numberWithOptions(
+                        signed: false, decimal: false),
+                    decoration: InputDecoration(
+                        labelText: 'штрих-код',
+                        suffixIcon: IconButton(
+                            iconSize: 35,
+                            icon: Icon(Icons.camera_alt),
+                            onPressed: () => _scanBarcode(context))),
+                  ),
+                ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              alignment: Alignment.bottomLeft,
-              child: TextFormField(
-                style: theme.textTheme.title,
-                inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-                keyboardType: TextInputType.phone,
-                controller: phoneController,
-                decoration: InputDecoration(
-                  labelText: 'телефон',
-                  filled: true,
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              alignment: Alignment.bottomLeft,
-              child: TextField(
-                style: theme.textTheme.title,
-                controller: seatNumberController,
-                inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-                keyboardType: TextInputType.numberWithOptions(
-                    signed: false, decimal: false),
-                decoration: InputDecoration(
-                  labelText: 'номер места',
-                  filled: true,
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              alignment: Alignment.bottomLeft,
-              child: CheckboxListTile(
-                value: isPresent,
-                title: Text(
-                  'присутствует',
-                  style: theme.textTheme.title,
-                ),
-                subtitle: getDateTimeFormat(),
-                onChanged: (bool value) {
-                  setState(() {
-                    isPresent = value;
-                  });
-                },
-              ),
-            ),
-            TextField(
-              controller: barcodeController,
-              inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-              keyboardType: TextInputType.numberWithOptions(
-                  signed: false, decimal: false),
-              decoration: InputDecoration(
-                  labelText: 'штрих-код',
-                  suffixIcon: IconButton(
-                      iconSize: 35,
-                      icon: Icon(Icons.camera_alt),
-                      onPressed: _scanBarcode)),
-            ),
-          ],
-        ),
       ),
     );
   }

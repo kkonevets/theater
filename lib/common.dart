@@ -141,3 +141,17 @@ class DateTimeItem extends StatelessWidget {
     );
   }
 }
+
+void showMessage(BuildContext context, String message, {Color color}) {
+  final snackBar = SnackBar(
+    backgroundColor: color,
+    content: Text(message),
+    action: SnackBarAction(
+      label: '',
+      onPressed: () {},
+    ),
+  );
+
+  // Find the Scaffold in the Widget tree and use it to show a SnackBar!
+  Scaffold.of(context).showSnackBar(snackBar);
+}
