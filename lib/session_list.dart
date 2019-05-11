@@ -99,15 +99,17 @@ class _SessionListState extends State<SessionList> {
           fullscreenDialog: true,
         ));
 
-    setState(() {
-      if (action == DismissDialogAction.save) {
-        if (anew) {
+    if (action == DismissDialogAction.save) {
+      if (anew) {
+        setState(() {
           sessionBloc.add(session);
-        } else {
+        });
+      } else {
+        setState(() {
           sessionBloc.update(session);
-        }
+        });
       }
-    });
+    }
   }
 
   @override
