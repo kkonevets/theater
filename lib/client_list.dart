@@ -84,7 +84,7 @@ class _SessionRouteState extends State<SessionRoute> {
     );
   }
 
-  _displayClientBuilder(BuildContext context, [Client client]) async {
+  void _pushClientBuilder({Client client}) async {
     bool anew = false;
 
     if (client == null) {
@@ -93,13 +93,15 @@ class _SessionRouteState extends State<SessionRoute> {
           Client(time: DateTime.now(), isPresent: true, sessionId: session.id);
     }
 
-    final bool save = await showDialog(
-      context: context,
-      builder: (context) => ClientBuilder(client: client),
-    );
+    final DismissDialogAction action = await Navigator.push(
+        context,
+        MaterialPageRoute<DismissDialogAction>(
+          builder: (BuildContext context) => ClientBuilder(client: client),
+          fullscreenDialog: true,
+        ));
 
     setState(() {
-      if (save) {
+      if (action == DismissDialogAction.save) {
         if (anew) {
           clientBloc.add(client);
         } else {
@@ -107,15 +109,6 @@ class _SessionRouteState extends State<SessionRoute> {
         }
       }
     });
-  }
-
-  void _pushClientBuilder({Client client}) {
-    Navigator.push(
-        context,
-        MaterialPageRoute<DismissDialogAction>(
-          builder: (BuildContext context) => ClientBuilder(client: client),
-          fullscreenDialog: true,
-        ));
   }
 
   @override

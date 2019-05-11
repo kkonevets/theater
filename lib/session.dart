@@ -108,7 +108,7 @@ class _SessionBuilderState extends State<SessionBuilder> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('From', style: theme.textTheme.caption),
+              Text('Начало', style: theme.textTheme.caption),
               DateTimeItem(
                 dateTime: _fromDateTime,
                 onChanged: (DateTime value) {
