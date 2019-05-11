@@ -9,10 +9,6 @@ enum DismissDialogAction {
   save,
 }
 
-DateTime toMscTime(DateTime time) {
-  return time.toUtc().add(Duration(hours: 3));
-}
-
 Widget buildStreamList(Bloc bloc, Function buildRow) {
   Widget loadingData() {
     return Container(
