@@ -5,7 +5,6 @@ import 'package:theater/bloc.dart';
 import 'package:theater/common.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
-import 'package:theater/common.dart';
 
 class SessionRoute extends StatefulWidget {
   final Session session;

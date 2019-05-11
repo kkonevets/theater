@@ -1,5 +1,4 @@
 import 'package:meta/meta.dart';
-import 'package:theater/common.dart';
 
 abstract class Record {
   int id;
