@@ -32,24 +32,27 @@ class _SessionListState extends State<SessionList> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
-                    child: Text(
-                      session.name,
-                      style: TextStyle(fontSize: 18.0),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
+                      child: Text(
+                        session.name,
+                        softWrap:true,
+                        style: TextStyle(fontSize: 18.0),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
-                    child: Text(
-                      DateFormat.Hm().format(session.time),
-                      style: TextStyle(fontSize: 15.0),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
+                      child: Text(
+                        DateFormat.Hm().format(session.time),
+                        style: TextStyle(fontSize: 15.0),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               InkWell(
                   onTap: () => _pushSessionBuilder(session: session),

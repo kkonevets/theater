@@ -24,8 +24,10 @@ class _SessionBuilderState extends State<SessionBuilder> {
 
   _SessionBuilderState(this.session) {
     if (session != null) {
-      nameController.text = session.name;
+      nameController.text =
+          DateTime.now().toString(); //session.name;
       _eventName = nameController.text;
+      _fromDateTime = session.time;
       _hasName = true;
       totalSeatsController.text =
           session.totalSeats == null ? "" : session.totalSeats.toString();

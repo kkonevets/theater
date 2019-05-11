@@ -50,26 +50,28 @@ class _SessionRouteState extends State<SessionRoute> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
-                    child: Text(
-                      client.name,
-                      style: TextStyle(
-                        fontSize: 18.0,
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
+                      child: Text(
+                        client.name,
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
-                    child: Text(
-                      rowText,
-                      style: TextStyle(fontSize: 15.0),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
+                      child: Text(
+                        rowText,
+                        style: TextStyle(fontSize: 15.0),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
