@@ -7,15 +7,18 @@ import 'package:theater/common.dart';
 
 class ClientBuilder extends StatefulWidget {
   final Client client;
+  final Color color;
 
-  ClientBuilder({Key key, this.client}) : super(key: key);
+  ClientBuilder({Key key, this.client, this.color}) : super(key: key);
 
   @override
-  _ClientBuilderState createState() => _ClientBuilderState(client);
+  _ClientBuilderState createState() => _ClientBuilderState(client, color);
 }
 
 class _ClientBuilderState extends State<ClientBuilder> {
   final Client client;
+  final Color color;
+
   bool isPresent = true;
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
@@ -25,7 +28,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
   bool _hasName = false;
   String _eventName;
 
-  _ClientBuilderState(this.client) {
+  _ClientBuilderState(this.client, this.color) {
     if (client != null) {
       nameController.text = client.name;
       _eventName = nameController.text;
@@ -90,6 +93,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_hasName ? _eventName : 'Имя клиента'),
+        backgroundColor: color,
         actions: <Widget>[
           FlatButton(
             child: Text('SAVE',

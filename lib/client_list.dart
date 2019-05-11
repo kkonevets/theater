@@ -97,7 +97,8 @@ class _SessionRouteState extends State<SessionRoute> {
 
       if (client != null) {
         if (client.isPresent == null || client.isPresent == false) {
-          _pushClientBuilder(client: client);
+          client.isPresent = true;
+          _pushClientBuilder(client: client, color: Colors.green);
         } else {
           showMessage(context, "Такой штрихкод уже есть", color: Colors.yellow);
         }
@@ -122,7 +123,7 @@ class _SessionRouteState extends State<SessionRoute> {
     }
   }
 
-  void _pushClientBuilder({Client client}) async {
+  void _pushClientBuilder({Client client, Color color}) async {
     bool anew = false;
 
     if (client == null) {
@@ -136,7 +137,8 @@ class _SessionRouteState extends State<SessionRoute> {
     final DismissDialogAction action = await Navigator.push(
         context,
         MaterialPageRoute<DismissDialogAction>(
-          builder: (BuildContext context) => ClientBuilder(client: client),
+          builder: (BuildContext context) =>
+              ClientBuilder(client: client, color: color),
           fullscreenDialog: true,
         ));
 
