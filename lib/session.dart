@@ -25,7 +25,7 @@ class _SessionBuilderState extends State<SessionBuilder> {
   _SessionBuilderState(this.session) {
     if (session != null) {
       nameController.text = session.name;
-      _eventName = session.name;
+      _eventName = nameController.text;
       _hasName = true;
       totalSeatsController.text =
           session.totalSeats == null ? "" : session.totalSeats.toString();
@@ -59,9 +59,9 @@ class _SessionBuilderState extends State<SessionBuilder> {
               if (nameController.text.isNotEmpty) {
                 session.name = nameController.text;
                 session.totalSeats = int.tryParse(totalSeatsController.text);
-              }
 
-              Navigator.pop(context, DismissDialogAction.save);
+                Navigator.pop(context, DismissDialogAction.save);
+              }
             },
           ),
         ],

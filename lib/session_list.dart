@@ -72,29 +72,6 @@ class _SessionListState extends State<SessionList> {
     );
   }
 
-  _displaySessionBuilder(BuildContext context, [Session session]) async {
-    bool anew = false;
-    if (session == null) {
-      anew = true;
-      session = Session(time: DateTime.now());
-    }
-
-    final bool save = await showDialog(
-      context: context,
-      builder: (context) => SessionBuilder(session: session),
-    );
-
-    setState(() {
-      if (save) {
-        if (anew) {
-          sessionBloc.add(session);
-        } else {
-          sessionBloc.update(session);
-        }
-      }
-    });
-  }
-
   void _pushSession(Session session) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -103,13 +80,29 @@ class _SessionListState extends State<SessionList> {
     );
   }
 
-  void _pushSessionBuilder({Session session}) {
-    Navigator.push(
+  void _pushSessionBuilder({Session session}) async {
+    bool anew = false;
+    if (session == null) {
+      anew = true;
+      session = Session(time: DateTime.now());
+    }
+
+    final DismissDialogAction action = await Navigator.push(
         context,
         MaterialPageRoute<DismissDialogAction>(
           builder: (BuildContext context) => SessionBuilder(session: session),
           fullscreenDialog: true,
         ));
+
+    setState(() {
+      if (action == DismissDialogAction.save) {
+        if (anew) {
+          sessionBloc.add(session);
+        } else {
+          sessionBloc.update(session);
+        }
+      }
+    });
   }
 
   @override

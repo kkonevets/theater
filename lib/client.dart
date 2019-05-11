@@ -28,7 +28,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
   _ClientBuilderState(this.client) {
     if (client != null) {
       nameController.text = client.name;
-      _eventName = client.name;
+      _eventName = nameController.text;
       _hasName = true;
       phoneController.text = client.phoneNumber;
       barcodeController.text = client.barcode;
@@ -101,9 +101,8 @@ class _ClientBuilderState extends State<ClientBuilder> {
                 client.barcode = barcodeController.text;
                 client.isPresent = isPresent;
                 client.seatNumber = int.tryParse(seatNumberController.text);
+                Navigator.pop(context, DismissDialogAction.save);
               }
-
-              Navigator.pop(context, DismissDialogAction.save);
             },
           ),
         ],
@@ -118,7 +117,7 @@ class _ClientBuilderState extends State<ClientBuilder> {
               alignment: Alignment.bottomLeft,
               child: TextField(
                 controller: nameController,
-                autofocus: true,
+//                autofocus: true,
                 decoration: const InputDecoration(
                   labelText: 'Имя',
                   filled: true,
