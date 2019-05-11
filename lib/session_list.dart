@@ -40,7 +40,7 @@ class _SessionListState extends State<SessionList> {
                       padding: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
                       child: Text(
                         session.name,
-                        softWrap:true,
+                        softWrap: true,
                         style: TextStyle(fontSize: 18.0),
                       ),
                     ),

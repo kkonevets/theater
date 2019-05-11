@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:theater/bloc.dart';
 import 'package:theater/models.dart';
 import 'package:intl/intl.dart';
-//import 'package:intl/date_symbol_data_local.dart';
 
 enum DismissDialogAction {
   cancel,
@@ -15,6 +14,21 @@ DateTime toMscTime(DateTime time) {
 }
 
 Widget buildStreamList(Bloc bloc, Function buildRow) {
+  Widget loadingData() {
+    return Container(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CircularProgressIndicator(),
+            Text("Loading...",
+                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w500))
+          ],
+        ),
+      ),
+    );
+  }
+
   return StreamBuilder(
       stream: bloc.stream,
       builder: (BuildContext context, AsyncSnapshot<List<Record>> snapshot) {
@@ -38,26 +52,10 @@ Widget buildStreamList(Bloc bloc, Function buildRow) {
           }
         } else {
           return Center(
-            child: loadingData(bloc),
+            child: loadingData(),
           );
         }
       });
-}
-
-Widget loadingData(Bloc bloc) {
-  bloc.getItems();
-  return Container(
-    child: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          CircularProgressIndicator(),
-          Text("Loading...",
-              style: TextStyle(fontSize: 19, fontWeight: FontWeight.w500))
-        ],
-      ),
-    ),
-  );
 }
 
 Widget emptyListMessageWidget() {
