@@ -24,8 +24,7 @@ class _SessionBuilderState extends State<SessionBuilder> {
 
   _SessionBuilderState(this.session) {
     if (session != null) {
-      nameController.text =
-          DateTime.now().toString(); //session.name;
+      nameController.text = session.name;
       _eventName = nameController.text;
       _fromDateTime = session.time;
       _hasName = true;
@@ -61,6 +60,9 @@ class _SessionBuilderState extends State<SessionBuilder> {
               if (nameController.text.isNotEmpty) {
                 session.name = nameController.text;
                 session.totalSeats = int.tryParse(totalSeatsController.text);
+                if (_fromDateTime != null){
+                  session.time = _fromDateTime;
+                }
 
                 Navigator.pop(context, DismissDialogAction.save);
               }

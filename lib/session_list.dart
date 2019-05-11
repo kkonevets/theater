@@ -59,6 +59,7 @@ class _SessionListState extends State<SessionList> {
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Padding(
