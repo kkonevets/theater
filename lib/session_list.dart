@@ -126,6 +126,7 @@ class _SessionListState extends State<SessionList> {
         ],
       ),
       body: buildStreamList(sessionBloc, _buildRow),
+      floatingActionButtonLocation:FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: _pushSessionBuilder,
         tooltip: 'Добавить сеанс',

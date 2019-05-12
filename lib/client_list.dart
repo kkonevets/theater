@@ -161,7 +161,7 @@ class _SessionRouteState extends State<SessionRoute> {
                 onPressed: () => _scanBarcodeInList(innerContext))),
       ]),
       body: buildStreamList(clientBloc, _buildRow),
-
+      floatingActionButtonLocation:FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: _pushClientBuilder,
         tooltip: 'Добавить зрителя',

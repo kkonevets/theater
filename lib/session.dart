@@ -78,7 +78,7 @@ class _SessionBuilderState extends State<SessionBuilder> {
             alignment: Alignment.bottomLeft,
             child: TextField(
               controller: nameController,
-              autofocus: true,
+//              autofocus: true,
               decoration: const InputDecoration(
                 labelText: 'Имя сеанса',
                 filled: true,
