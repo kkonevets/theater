@@ -112,10 +112,16 @@ class _SessionListState extends State<SessionList> {
     }
   }
 
+  void callback() {
+    setState(() {
+      sessionBloc.getItems();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: new MenuDrawer(),
+      drawer: new MenuDrawer(callback: callback),
       appBar: AppBar(
         title: Text(widget.title),
         actions: <Widget>[
@@ -126,7 +132,7 @@ class _SessionListState extends State<SessionList> {
         ],
       ),
       body: buildStreamList(sessionBloc, _buildRow),
-      floatingActionButtonLocation:FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: _pushSessionBuilder,
         tooltip: 'Добавить сеанс',
