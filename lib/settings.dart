@@ -58,7 +58,8 @@ Future _test() async {
   final db = await helper.database;
 
   // добавляем новый сеанс
-  int sessionId = await helper.insert(_sessions[0]);
+  Session session = _sessions[0];
+  int sessionId = await helper.insert(session);
   for (Client client in _clients) {
     client.sessionId = sessionId;
     int id = await helper.insert(client);
